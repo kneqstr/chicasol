@@ -72,6 +72,19 @@ export async function setAuthCookies({ accessToken, refreshToken }: SetCookiesPr
   });
 }
 
+export async function getSession() {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  if (!accessToken) return { isAuth: false };
+
+  try {
+    await verifyAccessToken(accessToken);
+    return { isAuth: true };
+  } catch {
+    return { isAuth: false };
+  }
+}
+
 export async function clearAuthCookies() {
   const cookieStore = await cookies();
   cookieStore.delete("access_token");

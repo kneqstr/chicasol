@@ -1,4 +1,4 @@
-import ProtectedVideo from "@/components/ProtectedVideo";
+import ProtectedVideo from "@/components/protected-component";
 
 const Home = () => {
   return (

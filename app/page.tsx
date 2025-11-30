@@ -8,7 +8,7 @@ const Home = () => {
           <Link href="/">home</Link>
         </li>
         <li>
-          <Link href="/about">About</Link>
+          <Link href="/course">About</Link>
         </li>
         <li>
           <Link href="/login">login</Link>
@@ -20,7 +20,6 @@ const Home = () => {
           <Link href="/profile">profile</Link>
         </li>
       </ul>
-
     </div>
   );
 };
