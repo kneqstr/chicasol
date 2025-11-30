@@ -20,6 +20,7 @@ const Home = () => {
           <Link href="/profile">profile</Link>
         </li>
       </ul>
+
     </div>
   );
 };
