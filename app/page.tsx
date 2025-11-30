@@ -2,9 +2,25 @@ import Link from "next/link";
 
 const Home = () => {
   return (
-    <div className="p-8">
-      <h1 className="text-2xl mb-4">Home</h1>
-      <Link href="/course">Course</Link>
+    <div>
+      <ul>
+        <li>
+          <Link href="/">home</Link>
+        </li>
+        <li>
+          <Link href="/about">About</Link>
+        </li>
+        <li>
+          <Link href="/login">login</Link>
+        </li>
+        <li>
+          <Link href="/register">register</Link>
+        </li>
+        <li>
+          <Link href="/profile">profile</Link>
+        </li>
+      </ul>
+
     </div>
   );
 };
