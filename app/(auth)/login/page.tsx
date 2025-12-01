@@ -1,6 +1,5 @@
 "use client";
-import { loginAction, logoutAction } from "@/services/auth.actions";
-import Link from "next/link";
+import { loginAction } from "@/services/auth.actions";
 import { useState } from "react";
 import { BaseResult } from "@/types/auth";
 
@@ -17,34 +16,9 @@ export default function LoginPage() {
       setState(result);
     }
   }
-  async function handleLogout() {
-    await logoutAction();
-  }
 
   return (
     <main className="min-h-screen flex items-center justify-center">
-      <ul>
-        <li>
-          <Link href="/">home</Link>
-        </li>
-        <li>
-          <Link href="/about">About</Link>
-        </li>
-        <li>
-          <Link href="/login">login</Link>
-        </li>
-        <li>
-          <Link href="/register">register</Link>
-        </li>
-        <li>
-          <Link href="/profile">profile</Link>
-        </li>
-      </ul>
-      <form action={handleLogout}>
-        <button type="submit" className="w-full py-2 bg-blue-600 rounded hover:bg-blue-700">
-          Log out
-        </button>
-      </form>
       {state.error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
           {state.error}
