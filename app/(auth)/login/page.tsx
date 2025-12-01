@@ -3,6 +3,7 @@ import { loginAction, logoutAction } from "@/services/auth.actions";
 import Link from "next/link";
 import { useState } from "react";
 import { BaseResult } from "@/types/auth";
+import { useSearchParams } from "next/navigation";
 
 export default function LoginPage() {
   const [state, setState] = useState<BaseResult>({
@@ -10,6 +11,8 @@ export default function LoginPage() {
     error: undefined,
     message: undefined,
   });
+  const searchParams = useSearchParams();
+  const callbackUrl = searchParams.get("callbackUrl") || "/";
 
   async function handleSubmit(formData: FormData) {
     const result = await loginAction(formData);
@@ -17,34 +20,9 @@ export default function LoginPage() {
       setState(result);
     }
   }
-  async function handleLogout() {
-    await logoutAction();
-  }
 
   return (
     <main className="min-h-screen flex items-center justify-center">
-      <ul>
-        <li>
-          <Link href="/">home</Link>
-        </li>
-        <li>
-          <Link href="/about">About</Link>
-        </li>
-        <li>
-          <Link href="/login">login</Link>
-        </li>
-        <li>
-          <Link href="/register">register</Link>
-        </li>
-        <li>
-          <Link href="/profile">profile</Link>
-        </li>
-      </ul>
-      <form action={handleLogout}>
-        <button type="submit" className="w-full py-2 bg-blue-600 rounded hover:bg-blue-700">
-          Log out
-        </button>
-      </form>
       {state.error && (
         <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-4">
           {state.error}
@@ -60,7 +38,7 @@ export default function LoginPage() {
         <h1 className="text-2xl font-semibold mb-4">Вхід</h1>
 
         {state.error && <p className="text-red-500 mb-2">{state.error}</p>}
-
+        <input type="hidden" name="callbackUrl" value={callbackUrl} />
         <label className="block mb-2">Email</label>
         <input name="email" type="email" required className="w-full p-2 border rounded mb-4" />
 

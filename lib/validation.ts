@@ -61,6 +61,7 @@ export const CompleteRegistrationSchema = z
 export const LoginSchema = z.object({
   email: emailValidation,
   password: z.string().min(1, "Пароль обов'язковий"),
+  callbackUrl: z.string(),
 });
 
 export function handleZodError(error: z.ZodError): {

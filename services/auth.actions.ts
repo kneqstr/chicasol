@@ -211,7 +211,7 @@ export async function loginAction(formData: FormData): Promise<BaseResult> {
 
   const payload = Object.fromEntries(formData) as LoginFormData;
 
-  const { email, password } = LoginSchema.parse(payload);
+  const { email, password, callbackUrl } = LoginSchema.parse(payload);
 
   if (!email || !password) return { success: false, error: "Заповнiть поля" };
 
@@ -233,7 +233,7 @@ export async function loginAction(formData: FormData): Promise<BaseResult> {
   });
 
   await setAuthCookies({ accessToken, refreshToken });
-  redirect("/");
+  redirect(callbackUrl);
 }
 
 export async function logoutAction() {
