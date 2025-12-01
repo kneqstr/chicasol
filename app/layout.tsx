@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { NavbarWrapper } from "@/components/layout/navbar-wrapper";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 
@@ -21,7 +22,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <div className="min-h-screen flex flex-col">
+            <NavbarWrapper />
+            <main className="flex-1">{children}</main>
+          </div>
         </ThemeProvider>
       </body>
     </html>

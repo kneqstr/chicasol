@@ -1,6 +1,5 @@
 "use client";
-import { loginAction, logoutAction } from "@/services/auth.actions";
-import Link from "next/link";
+import { loginAction } from "@/services/auth.actions";
 import { useState } from "react";
 import { BaseResult } from "@/types/auth";
 import { useSearchParams } from "next/navigation";
