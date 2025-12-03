@@ -7,7 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { setLanguage } from "@/lib/language";
+import { setLanguage } from "@/lib/translations/language";
 
 interface ISwitcherProps {
   lang: "uk" | "ru";

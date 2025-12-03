@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { NavbarWrapper } from "@/components/layout/navbar-wrapper";
 import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
-import { getLanguage } from "@/lib/language";
+import { getLanguage } from "@/lib/translations/language";
+import { Toaster } from "@/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -26,7 +27,17 @@ export default async function RootLayout({
         >
           <div className="min-h-screen flex flex-col">
             <NavbarWrapper />
-            <main className="flex-1">{children}</main>
+            <main className="flex-1">
+              {children}
+              <Toaster
+                position="top-center"
+                closeButton={false}
+                toastOptions={{
+                  duration: 1500,
+                  className: "text-red-600 font-medium text-sm",
+                }}
+              />
+            </main>
           </div>
         </ThemeProvider>
       </body>

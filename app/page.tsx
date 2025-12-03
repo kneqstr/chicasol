@@ -1,5 +1,5 @@
-import { getPageContent } from "@/lib/content";
-import { getLanguage } from "@/lib/language";
+import { getPageContent } from "@/lib/translations/content";
+import { getLanguage } from "@/lib/translations/language";
 
 export default async function HomePage() {
   const lang = await getLanguage();

@@ -1,6 +1,6 @@
 import { getSession } from "@/lib/auth";
 import { Navbar } from "./navbar";
-import { getLanguage } from "@/lib/language";
+import { getLanguage } from "@/lib/translations/language";
 
 export async function NavbarWrapper() {
   const session = await getSession();
