@@ -3,7 +3,7 @@
 import contentModel, { ContentUnion } from "@/models/content.model";
 import { connectDB } from "./db";
 
-export async function getPageContent(page: string, lang: "ua" | "ru") {
+export async function getPageContent(page: string, lang: "uk" | "ru") {
   await connectDB();
   const blocks = await contentModel.find({ page }).lean();
 

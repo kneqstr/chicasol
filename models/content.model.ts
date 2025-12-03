@@ -14,7 +14,7 @@ interface IContentObject {
 export type ContentUnion = string | string[] | IContentObject | IContentObject[];
 
 interface IContent {
-  ua: ContentUnion;
+  uk: ContentUnion;
   ru: ContentUnion;
 }
 
@@ -34,7 +34,7 @@ const ContentSchema = new Schema<IContentSchema>(
     page: { type: String, required: true },
     type: { type: String, default: "text" },
     content: {
-      ua: { type: Schema.Types.Mixed, required: true },
+      uk: { type: Schema.Types.Mixed, required: true },
       ru: { type: Schema.Types.Mixed, required: true },
     },
   },

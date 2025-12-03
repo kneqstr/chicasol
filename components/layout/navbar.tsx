@@ -13,7 +13,7 @@ import { LanguageSwitcher } from "../language-switch";
 
 interface INavbar {
   session: { isAuth: boolean };
-  lang: "ua" | "ru";
+  lang: "uk" | "ru";
 }
 interface INavItem {
   href: string;
