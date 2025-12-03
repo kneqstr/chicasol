@@ -9,9 +9,11 @@ import { logoutAction } from "@/services/auth.actions";
 import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { useState } from "react";
 import { Menu } from "lucide-react";
+import { LanguageSwitcher } from "../language-switch";
 
 interface INavbar {
   session: { isAuth: boolean };
+  lang: "ua" | "ru";
 }
 interface INavItem {
   href: string;
@@ -21,7 +23,7 @@ interface INavItem {
 const publicNavItems: INavItem[] = [{ href: "/", lable: "На гловну" }];
 const privateNavItems: INavItem[] = [{ href: "/course", lable: "Мої курси" }];
 
-export const Navbar = ({ session }: INavbar) => {
+export const Navbar = ({ session, lang }: INavbar) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const pathname = usePathname();
   async function handleLogout() {
@@ -64,6 +66,7 @@ export const Navbar = ({ session }: INavbar) => {
                   </Button>
                 ))}
               <ModeToggle />
+              <LanguageSwitcher lang={lang} />
             </div>
             <div className="flex items-center space-x-2">
               {session.isAuth ? (
@@ -117,6 +120,10 @@ export const Navbar = ({ session }: INavbar) => {
                         onClick={() => setIsOpen(false)}
                       />
                     ))}
+                  <div className="flex items-center justify-end space-x-2 mx-4">
+                    <ModeToggle />
+                    <LanguageSwitcher lang={lang} />
+                  </div>
                   <div className="border-t pt-4 mt-4 mx-4">
                     {session.isAuth ? (
                       <Button

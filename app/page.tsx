@@ -1,27 +1,15 @@
-import Link from "next/link";
+import { getPageContent } from "@/lib/content";
+import { getLanguage } from "@/lib/language";
 
-const Home = () => {
+export default async function HomePage() {
+  const lang = await getLanguage();
+
+  const content = await getPageContent("home", lang);
+
   return (
     <div>
-      <ul>
-        <li>
-          <Link href="/">home</Link>
-        </li>
-        <li>
-          <Link href="/course">About</Link>
-        </li>
-        <li>
-          <Link href="/login">login</Link>
-        </li>
-        <li>
-          <Link href="/register">register</Link>
-        </li>
-        <li>
-          <Link href="/profile">profile</Link>
-        </li>
-      </ul>
+      <h1>{content.home_title}</h1>
+      <p>{content.home_subtitle}</p>
     </div>
   );
-};
-
-export default Home;
+}
