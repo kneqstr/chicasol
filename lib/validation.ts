@@ -1,73 +1,110 @@
 import { z } from "zod";
+import { tz } from "./translations/language";
 
-export const emailValidation = z
-  .email("Введіть коректний email")
-  .min(1, "Email обов'язковий")
-  .max(255, "Email занадто довгий")
-  .toLowerCase()
-  .trim();
+export async function createEmailValidation() {
+  const invalid = await tz("email", "invalid");
+  const required = await tz("email", "required");
+  const tooLong = await tz("email", "tooLong");
 
-export const passwordValidation = z
-  .string()
-  .min(8, "Пароль повинен бути не менше 8 символів")
-  .max(128, "Пароль занадто довгий")
-  .regex(/[A-Z]/, "Пароль повинен містити хоча б одну велику літеру")
-  .regex(/[a-z]/, "Пароль повинен містити хоча б одну малу літеру")
-  .regex(/[0-9]/, "Пароль повинен містити хоча б одну цифру")
-  .regex(/[^A-Za-z0-9]/, "Пароль повинен містити хоча б один спеціальний символ");
+  return z.email(invalid).min(1, required).max(255, tooLong).toLowerCase().trim();
+}
 
-export const codeValidation = z
-  .string()
-  .length(6, "Код повинен складатись з 6 цифр")
-  .regex(/^\d+$/, "Код повинен містити тільки цифри");
+export async function createPasswordValidation() {
+  const tooShort = await tz("password", "tooShort");
+  const tooLong = await tz("password", "tooLong");
+  const oneUpper = await tz("password", "oneUpper");
+  const oneLower = await tz("password", "oneLower");
+  const oneDigit = await tz("password", "oneDigit");
+  const oneSpecial = await tz("password", "oneSpecial");
 
-export const nameValidation = z
-  .string()
-  .max(50, "Занадто довге значення")
-  .regex(/^[a-zA-Zа-яА-ЯїЇіІєЄґҐ'\-\s]+$/, "Може містити тільки літери, апостроф та дефіс")
-  .trim()
-  .optional();
+  return z
+    .string()
+    .min(8, tooShort)
+    .max(128, tooLong)
+    .regex(/[A-Z]/, oneUpper)
+    .regex(/[a-z]/, oneLower)
+    .regex(/[0-9]/, oneDigit)
+    .regex(/[^A-Za-z0-9]/, oneSpecial);
+}
 
-export const phoneValidation = z
-  .string()
-  .min(10, "Телефон повинен містити не менше 10 цифр")
-  .max(15, "Телефон занадто довгий")
-  .regex(/^[\+]?[0-9\s\-\(\)]+$/, "Невірний формат телефону")
-  .optional();
+export async function createCodeValidation() {
+  const length = await tz("code", "length");
+  const numbers = await tz("code", "numbers");
 
-export const EmailSchema = z.object({
-  email: emailValidation,
-});
+  return z.string().length(6, length).regex(/^\d+$/, numbers);
+}
 
-export const VerifyCodeSchema = z.object({
-  email: emailValidation,
-  code: codeValidation,
-});
+export async function createNameValidation() {
+  const tooLong = await tz("name", "tooLong");
+  const invalid = await tz("name", "invalid");
 
-export const CompleteRegistrationSchema = z
-  .object({
-    email: emailValidation,
-    password: passwordValidation,
-    confirmPassword: z.string().min(1, "Підтвердження паролю обов'язкове"),
-    firstName: nameValidation,
-    lastName: nameValidation,
-    phone: phoneValidation,
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Паролі не співпадають",
-    path: ["confirmPassword"],
+  return z
+    .string()
+    .max(50, tooLong)
+    .regex(/^[a-zA-Zа-яА-ЯїЇіІєЄґҐ'\-\s]+$/, invalid)
+    .trim()
+    .optional();
+}
+
+export async function createPhoneValidation() {
+  const tooShort = await tz("phone", "tooShort");
+  const tooLong = await tz("phone", "tooLong");
+  const invalid = await tz("phone", "invalid");
+
+  return z
+    .string()
+    .min(10, tooShort)
+    .max(15, tooLong)
+    .regex(/^[\+]?[0-9\s\-\(\)]+$/, invalid)
+    .optional();
+}
+
+export async function createEmailSchema() {
+  return z.object({
+    email: await createEmailValidation(),
   });
+}
 
-export const LoginSchema = z.object({
-  email: emailValidation,
-  password: z.string().min(1, "Пароль обов'язковий"),
-  callbackUrl: z.string(),
-});
+export async function createVerifyCodeSchema() {
+  return z.object({
+    email: await createEmailValidation(),
+    code: await createCodeValidation(),
+  });
+}
+
+export async function createLoginSchema() {
+  const passwordRequired = await tz("password", "required");
+
+  return z.object({
+    email: await createEmailValidation(),
+    password: z.string().min(1, passwordRequired),
+    callbackUrl: z.string(),
+  });
+}
+
+export async function createCompleteRegistrationSchema() {
+  const passwordConfirmRequired =
+    (await tz("password", "confirmRequired")) || "Підтвердження паролю обов'язкове";
+  const passwordsMatch = (await tz("password", "passwordsMatch")) || "Паролі не співпадають";
+
+  return z
+    .object({
+      email: await createEmailValidation(),
+      password: await createPasswordValidation(),
+      confirmPassword: z.string().min(1, passwordConfirmRequired),
+      firstName: await createNameValidation(),
+      lastName: await createNameValidation(),
+      phone: await createPhoneValidation(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: passwordsMatch,
+      path: ["confirmPassword"],
+    });
+}
 
 export function handleZodError(error: z.ZodError): {
   success: false;
   error: string;
-  fieldErrors: Record<string, string>;
 } {
   const fieldErrors: Record<string, string> = {};
 
@@ -76,16 +113,35 @@ export function handleZodError(error: z.ZodError): {
     fieldErrors[field] = issue.message;
   });
 
-  const firstError = error.issues[0]?.message || "Помилка валідації";
+  const firstError = error.issues[0]?.message || "Validation error";
 
   return {
     success: false,
     error: firstError,
-    fieldErrors,
   };
 }
 
-export type CodeFormData = z.infer<typeof VerifyCodeSchema>;
-export type EmailFormData = z.infer<typeof EmailSchema>;
-export type CompleteFormData = z.infer<typeof CompleteRegistrationSchema>;
-export type LoginFormData = z.infer<typeof LoginSchema>;
+export type EmailFormData = z.infer<z.ZodObject<{ email: z.ZodString }>>;
+export type CodeFormData = z.infer<
+  z.ZodObject<{
+    email: z.ZodString;
+    code: z.ZodString;
+  }>
+>;
+export type LoginFormData = z.infer<
+  z.ZodObject<{
+    email: z.ZodString;
+    password: z.ZodString;
+    callbackUrl: z.ZodString;
+  }>
+>;
+export type CompleteFormData = z.infer<
+  z.ZodObject<{
+    email: z.ZodString;
+    password: z.ZodString;
+    confirmPassword: z.ZodString;
+    firstName?: z.ZodOptional<z.ZodString>;
+    lastName?: z.ZodOptional<z.ZodString>;
+    phone?: z.ZodOptional<z.ZodString>;
+  }>
+>;

@@ -2,5 +2,6 @@ export type BaseResult = {
   success: boolean;
   error?: string;
   message?: string;
-  fieldErrors?: Record<string, string>;
+  email?: string;
+  password?: string;
 };

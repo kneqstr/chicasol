@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { ModeToggle } from "../mode-toggle";
 import { logoutAction } from "@/services/auth.actions";
@@ -26,11 +26,13 @@ const privateNavItems: INavItem[] = [{ href: "/course", lable: "Мої курс�
 export const Navbar = ({ session, lang }: INavbar) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const pathname = usePathname();
+  const router = useRouter();
   async function handleLogout() {
     await logoutAction();
+    router.push("/login");
   }
   return (
-    <nav className="border-b bg-background/95 backdrop-blur supports-\[backdrop-filter]:bg-background/60">
+    <nav className="fixed w-full border-b bg-background/95 backdrop-blur supports-\[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4">
         <div className="flex h-16 items-center justify-between">
           <Link href="/" className="flex items-center font-bold text-xl">
