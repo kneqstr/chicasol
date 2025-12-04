@@ -197,18 +197,18 @@ export async function completeRegistrationAction(formData: FormData): Promise<Ba
   }
 }
 
-export async function loginAction(formData: FormData): Promise<BaseResult> {
+export async function loginAction(prevState: BaseResult, formData: FormData): Promise<BaseResult> {
+  await connectDB();
+  const payload = Object.fromEntries(formData) as LoginFormData;
+  const LoginSchema = await createLoginSchema();
   try {
-    await connectDB();
-    const payload = Object.fromEntries(formData) as LoginFormData;
-    const LoginSchema = await createLoginSchema();
-    const { email, password, callbackUrl } = LoginSchema.parse(payload);
-
+    const { email, password } = LoginSchema.parse(payload);
     const user = await User.findOne({ email });
     if (!user) {
       return {
         success: false,
         error: await t("login", "invalidCredentials"),
+        email,
       };
     }
 
@@ -216,7 +216,8 @@ export async function loginAction(formData: FormData): Promise<BaseResult> {
     if (!valid) {
       return {
         success: false,
-        error: await t("login", "invalidCredentials"),
+        error: await t("login", "invalidPassword"),
+        email,
       };
     }
 
@@ -239,7 +240,9 @@ export async function loginAction(formData: FormData): Promise<BaseResult> {
 
     await setAuthCookies({ accessToken, refreshToken });
 
-    redirect(callbackUrl);
+    return {
+      success: true,
+    };
   } catch (error) {
     if (error instanceof z.ZodError) {
       return handleZodError(error);
@@ -260,5 +263,4 @@ export async function logoutAction() {
     await sessionModel.updateOne({ refreshToken: hashedRefreshToken }, { revoked: true });
   }
   await clearAuthCookies();
-  redirect("/login");
 }

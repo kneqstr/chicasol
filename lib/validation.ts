@@ -105,7 +105,6 @@ export async function createCompleteRegistrationSchema() {
 export function handleZodError(error: z.ZodError): {
   success: false;
   error: string;
-  fieldErrors: Record<string, string>;
 } {
   const fieldErrors: Record<string, string> = {};
 
@@ -119,7 +118,6 @@ export function handleZodError(error: z.ZodError): {
   return {
     success: false,
     error: firstError,
-    fieldErrors,
   };
 }
 
