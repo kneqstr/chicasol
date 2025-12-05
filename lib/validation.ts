@@ -53,8 +53,8 @@ export async function createPhoneValidation() {
 
   return z
     .string()
-    .min(10, tooShort)
-    .max(15, tooLong)
+    .min(19, tooShort)
+    .max(19, tooLong)
     .regex(/^[\+]?[0-9\s\-\(\)]+$/, invalid)
     .optional();
 }
@@ -78,7 +78,6 @@ export async function createLoginSchema() {
   return z.object({
     email: await createEmailValidation(),
     password: z.string().min(1, passwordRequired),
-    callbackUrl: z.string(),
   });
 }
 
@@ -105,6 +104,7 @@ export async function createCompleteRegistrationSchema() {
 export function handleZodError(error: z.ZodError): {
   success: false;
   error: string;
+  fieldErrors: Record<string, string>;
 } {
   const fieldErrors: Record<string, string> = {};
 
@@ -118,6 +118,7 @@ export function handleZodError(error: z.ZodError): {
   return {
     success: false,
     error: firstError,
+    fieldErrors,
   };
 }
 
@@ -132,7 +133,6 @@ export type LoginFormData = z.infer<
   z.ZodObject<{
     email: z.ZodString;
     password: z.ZodString;
-    callbackUrl: z.ZodString;
   }>
 >;
 export type CompleteFormData = z.infer<
