@@ -4,4 +4,8 @@ export type BaseResult = {
   message?: string;
   email?: string;
   password?: string;
+  firstName?: string;
+  lastName?: string;
+  phone?: string;
+  fieldErrors?: Record<string, string>;
 };

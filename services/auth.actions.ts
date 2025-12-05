@@ -14,7 +14,6 @@ import sessionModel from "@/models/session.model";
 import User from "@/models/user.model";
 import bcrypt from "bcrypt";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import * as z from "zod";
 import { BaseResult } from "@/types/auth";
 import {
@@ -36,7 +35,10 @@ function generateVereficationCode(): string {
   return Math.floor(100000 + Math.random() * 900000).toString();
 }
 
-export async function sendVerificationCodeAction(formData: FormData): Promise<BaseResult> {
+export async function sendVerificationCodeAction(
+  prevState: BaseResult,
+  formData: FormData,
+): Promise<BaseResult> {
   try {
     await connectDB();
 
@@ -50,6 +52,7 @@ export async function sendVerificationCodeAction(formData: FormData): Promise<Ba
       return {
         success: false,
         error: await t("registration", "userExists"),
+        email,
       };
     }
 
@@ -67,12 +70,14 @@ export async function sendVerificationCodeAction(formData: FormData): Promise<Ba
       return {
         success: false,
         error: await t("registration", "sendError"),
+        email,
       };
     }
 
     return {
       success: true,
       message: await t("registration", "codeSent"),
+      email,
     };
   } catch (error) {
     if (error instanceof z.ZodError) {
@@ -85,7 +90,10 @@ export async function sendVerificationCodeAction(formData: FormData): Promise<Ba
   }
 }
 
-export async function verifyCodeAction(formData: FormData): Promise<BaseResult> {
+export async function verifyCodeAction(
+  prevState: BaseResult,
+  formData: FormData,
+): Promise<BaseResult> {
   try {
     const payload = Object.fromEntries(formData) as CodeFormData;
     const VerifyCodeSchema = await createVerifyCodeSchema();
@@ -126,7 +134,10 @@ export async function verifyCodeAction(formData: FormData): Promise<BaseResult> 
   }
 }
 
-export async function completeRegistrationAction(formData: FormData): Promise<BaseResult> {
+export async function completeRegistrationAction(
+  prevState: BaseResult,
+  formData: FormData,
+): Promise<BaseResult> {
   try {
     await connectDB();
 
@@ -141,6 +152,9 @@ export async function completeRegistrationAction(formData: FormData): Promise<Ba
       return {
         success: false,
         error: await t("registration", "sessionExpired"),
+        firstName,
+        lastName,
+        phone,
       };
     }
 
@@ -149,6 +163,9 @@ export async function completeRegistrationAction(formData: FormData): Promise<Ba
       return {
         success: false,
         error: await t("registration", "userExists"),
+        firstName,
+        lastName,
+        phone,
       };
     }
 
@@ -198,10 +215,10 @@ export async function completeRegistrationAction(formData: FormData): Promise<Ba
 }
 
 export async function loginAction(prevState: BaseResult, formData: FormData): Promise<BaseResult> {
-  await connectDB();
-  const payload = Object.fromEntries(formData) as LoginFormData;
-  const LoginSchema = await createLoginSchema();
   try {
+    await connectDB();
+    const payload = Object.fromEntries(formData) as LoginFormData;
+    const LoginSchema = await createLoginSchema();
     const { email, password } = LoginSchema.parse(payload);
     const user = await User.findOne({ email });
     if (!user) {
@@ -242,6 +259,7 @@ export async function loginAction(prevState: BaseResult, formData: FormData): Pr
 
     return {
       success: true,
+      email,
     };
   } catch (error) {
     if (error instanceof z.ZodError) {
