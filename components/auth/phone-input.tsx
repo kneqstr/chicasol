@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { X } from "lucide-react";
 
@@ -10,18 +10,30 @@ interface PhoneInputProps {
   value: string;
   onChange: (v: string) => void;
   error?: string;
+  isPending?: boolean;
 }
 
-export function PhoneInput({ name, label = "Телефон", value, onChange, error }: PhoneInputProps) {
+export function PhoneInput({
+  name,
+  label = "Телефон",
+  value,
+  onChange,
+  error,
+  isPending,
+}: PhoneInputProps) {
   const isDeletingRef = useRef(false);
-
-  const stableOnChange = useCallback((v: string) => onChange(v), [onChange]);
+  const [isHighlighted, setIsHighlighted] = useState(false);
 
   useEffect(() => {
-    if (!value || value === "+38 (0") {
-      stableOnChange("+38 (0");
+    if (error && !isPending) {
+      Promise.resolve().then(() => {
+        setIsHighlighted(true);
+      });
+
+      const timer = setTimeout(() => setIsHighlighted(false), 2000);
+      return () => clearTimeout(timer);
     }
-  }, [stableOnChange, value]);
+  }, [error, isPending]);
 
   const extractDigits = (str: string): string => {
     const digits = str.replace(/\D/g, "");
@@ -124,9 +136,10 @@ export function PhoneInput({ name, label = "Телефон", value, onChange, er
             }, 0);
           }}
           className={`
-                    transition-colors duration-300 
-                    ${error ? "bg-red-100 border-red-500" : ""}
-                `}
+                        pr-10 
+                        transition-colors duration-700 
+                        ${isHighlighted ? "bg-red-100 border-red-500" : ""}
+          `}
         />
 
         {value.length > 6 && (

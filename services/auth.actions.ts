@@ -26,6 +26,8 @@ import {
   LoginFormData,
   createLoginSchema,
   createVerifyCodeSchema,
+  ExitFormData,
+  createExitSchema,
 } from "@/lib/validation";
 import { t } from "@/lib/translations/language";
 
@@ -55,6 +57,8 @@ export async function sendVerificationCodeAction(
         email,
       };
     }
+    const cookieStore = await cookies();
+    cookieStore.set("verification_email", email, { maxAge: 900 });
 
     const verificationCode = generateVereficationCode();
     await redis.setex(`verification${email}`, 15 * 60, verificationCode);
@@ -100,7 +104,6 @@ export async function verifyCodeAction(
     const { email, code } = VerifyCodeSchema.parse(payload);
 
     const storedCode = await redis.get(`verification${email}`);
-
     if (!storedCode) {
       return {
         success: false,
@@ -281,4 +284,17 @@ export async function logoutAction() {
     await sessionModel.updateOne({ refreshToken: hashedRefreshToken }, { revoked: true });
   }
   await clearAuthCookies();
+}
+
+export async function ExitRegistration(formData: FormData): Promise<BaseResult> {
+  const payload = Object.fromEntries(formData) as ExitFormData;
+  const ExitSchema = await createExitSchema();
+
+  const { email } = ExitSchema.parse(payload);
+
+  await redis.del(`pending-registration${email}`);
+  await redis.del(`verification${email}`);
+  return {
+    success: true,
+  };
 }

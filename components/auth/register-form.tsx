@@ -23,7 +23,6 @@ export default function RegisterPage() {
     }
     if (state.success) {
       toast.success(state.message);
-      sessionStorage.setItem("registrationEmail", state.email as string);
       router.push("/verify");
     }
   }, [state, router]);
