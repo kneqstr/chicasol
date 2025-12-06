@@ -7,7 +7,7 @@ export default async function HomePage() {
   const content = await getPageContent("home", lang);
 
   return (
-    <div>
+    <div className="mt-20">
       <h1>{content.home_title}</h1>
       <p>{content.home_subtitle}</p>
     </div>
