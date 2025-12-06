@@ -14,11 +14,15 @@ import {
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { AuthCard } from "./auth-card";
+import ExitButton from "./exit-button";
 
-export default function VerifyPage() {
+interface IVerifyProps {
+  email: string;
+}
+
+export default function VerifyPage({ email }: IVerifyProps) {
   const initialState: BaseResult = { success: false, error: undefined, email: undefined };
   const [state, formAction, isPending] = useActionState(verifyCodeAction, initialState);
-  const [email, setEmail] = useState("");
   const [code, setCode] = useState("");
   const router = useRouter();
 
@@ -26,17 +30,6 @@ export default function VerifyPage() {
     const numeric = value.replace(/\D/g, "");
     setCode(numeric);
   };
-
-  useEffect(() => {
-    const savedEmail = sessionStorage.getItem("registrationEmail");
-    if (savedEmail) {
-      Promise.resolve().then(() => {
-        setEmail(savedEmail);
-      });
-    } else {
-      router.push("/register");
-    }
-  }, [router]);
 
   useEffect(() => {
     if (state.error) {
@@ -87,12 +80,8 @@ export default function VerifyPage() {
             )}
           </Button>
         </div>
-        <div className="mt-4 text-center">
-          <Link href="/register" className="text-blue-600 hover:text-blue-800 text-sm">
-            Вернуться к регистрации
-          </Link>
-        </div>
       </form>
+      <ExitButton email={email} />
     </AuthCard>
   );
 }

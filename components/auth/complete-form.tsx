@@ -10,8 +10,13 @@ import { Check } from "lucide-react";
 import { AuthCard } from "./auth-card";
 import { AnimatedErrorInput } from "./animated-input";
 import { PhoneInput } from "./phone-input";
+import ExitButton from "./exit-button";
 
-export default function CompletePage() {
+interface ICompleteProps {
+  email: string;
+}
+
+export default function CompletePage({ email }: ICompleteProps) {
   const initialState: BaseResult = {
     success: false,
     error: undefined,
@@ -23,11 +28,10 @@ export default function CompletePage() {
     fieldErrors: {},
   };
   const [state, formAction, isPending] = useActionState(completeRegistrationAction, initialState);
-  const [email, setEmail] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [phone, setPhone] = useState("");
+  const [phone, setPhone] = useState("+38 (0");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -41,22 +45,10 @@ export default function CompletePage() {
   };
 
   useEffect(() => {
-    const savedEmail = sessionStorage.getItem("registrationEmail");
-    if (savedEmail) {
-      Promise.resolve().then(() => {
-        setEmail(savedEmail);
-      });
-    } else {
-      router.push("/register");
-    }
-  }, [router]);
-
-  useEffect(() => {
     if (state.error) {
       toast.error(state.error);
     }
     if (state.success) {
-      sessionStorage.removeItem("registrationEmail");
       toast.success(state.message);
       router.push("/");
     }
@@ -91,6 +83,7 @@ export default function CompletePage() {
             value={phone}
             onChange={setPhone}
             error={state.fieldErrors?.phone}
+            isPending={isPending}
           />
           <AnimatedErrorInput
             name="password"
@@ -132,6 +125,7 @@ export default function CompletePage() {
           </Button>
         </div>
       </form>
+      <ExitButton email={email} />
     </AuthCard>
   );
 }

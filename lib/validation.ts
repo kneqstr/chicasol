@@ -80,6 +80,11 @@ export async function createLoginSchema() {
     password: z.string().min(1, passwordRequired),
   });
 }
+export async function createExitSchema() {
+  return z.object({
+    email: await createEmailValidation(),
+  });
+}
 
 export async function createCompleteRegistrationSchema() {
   const passwordConfirmRequired =
@@ -133,6 +138,11 @@ export type LoginFormData = z.infer<
   z.ZodObject<{
     email: z.ZodString;
     password: z.ZodString;
+  }>
+>;
+export type ExitFormData = z.infer<
+  z.ZodObject<{
+    email: z.ZodString;
   }>
 >;
 export type CompleteFormData = z.infer<
