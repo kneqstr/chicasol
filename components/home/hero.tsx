@@ -130,7 +130,7 @@ export function Hero({ content }: { content: HeroProps }) {
               <ul className="mt-6 grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
                 {features?.map((item, index) => (
                   <li key={index} className="flex items-start gap-2">
-                    <span className="mt-0.5 text-lg">{item.icon}</span>
+                    <span className="mt-0.5 text-md">{item.icon}</span>
                     <span>{item.text}</span>
                   </li>
                 ))}

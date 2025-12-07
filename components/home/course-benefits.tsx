@@ -24,9 +24,9 @@ export default function CourseBenefits({ content }: { content: BenefitsProps }) 
                 <p className="text-muted-foreground text-xs">{card.subtitle}</p>
               </div>
               <Separator className="my-4" />
-              <div className="flex items-center h-5 space-x-4 text-xs font-sm lg:text-sm lg:font-medium">
+              <div className="flex items-center space-x-4 text-xs font-sm lg:text-sm lg:font-medium">
                 {card.items.map((item, idx) => (
-                  <div key={idx}>
+                  <div className="flex h-5 items-center space-x-4" key={idx}>
                     {idx > 0 && <Separator orientation="vertical" />}
                     <div>{item}</div>
                   </div>
