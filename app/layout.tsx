@@ -27,17 +27,15 @@ export default async function RootLayout({
         >
           <div className="min-h-screen flex flex-col">
             <NavbarWrapper />
-            <main className="flex-1">
-              {children}
-              <Toaster
-                position="top-center"
-                closeButton={false}
-                toastOptions={{
-                  duration: 1500,
-                  className: "text-red-600 font-medium text-sm",
-                }}
-              />
-            </main>
+            <main className="flex-1">{children}</main>
+            <Toaster
+              position="top-center"
+              closeButton={false}
+              toastOptions={{
+                duration: 1500,
+                className: "text-red-600 font-medium text-sm",
+              }}
+            />
           </div>
         </ThemeProvider>
       </body>
