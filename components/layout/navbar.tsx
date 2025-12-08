@@ -23,6 +23,7 @@ interface INavItem {
 const publicNavItems: INavItem[] = [
   { href: "/", lable: "На гловну" },
   { href: "/about", lable: "Про мене" },
+  { href: "/resources", lable: "Матерiали" },
 ];
 const privateNavItems: INavItem[] = [{ href: "/course", lable: "Мої курси" }];
 
