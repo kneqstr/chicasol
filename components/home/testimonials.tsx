@@ -105,13 +105,13 @@ export function Testimonials({ content }: { content: TestimonialsProps }) {
             </CarouselContent>
 
             <div className="flex items-center justify-center gap-4 mt-8">
-              <CarouselPrevious className="relative static h-10 w-10 rounded-full border bg-background shadow-sm hover:shadow-md" />
+              <CarouselPrevious className="relative h-10 w-10 rounded-full border bg-background shadow-sm hover:shadow-md" />
               <div className="flex items-center gap-1">
                 {items.slice(0, 3).map((_, i) => (
                   <div key={i} className="w-1.5 h-1.5 rounded-full bg-border" />
                 ))}
               </div>
-              <CarouselNext className="relative static h-10 w-10 rounded-full border bg-background shadow-sm hover:shadow-md" />
+              <CarouselNext className="relative h-10 w-10 rounded-full border bg-background shadow-sm hover:shadow-md" />
             </div>
           </Carousel>
         </div>
@@ -206,7 +206,7 @@ function TestimonialCard({ item, index }: { item: Testimonial; index: number }) 
         </div>
       </CardContent>
 
-      <div className="absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="absolute left-0 top-0 bottom-0 w-1 bg-linear-to-b from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
     </Card>
   );
 }

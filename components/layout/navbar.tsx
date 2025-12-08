@@ -20,7 +20,10 @@ interface INavItem {
   lable: string;
 }
 
-const publicNavItems: INavItem[] = [{ href: "/", lable: "На гловну" }];
+const publicNavItems: INavItem[] = [
+  { href: "/", lable: "На гловну" },
+  { href: "/about", lable: "Про мене" },
+];
 const privateNavItems: INavItem[] = [{ href: "/course", lable: "Мої курси" }];
 
 export const Navbar = ({ session, lang }: INavbar) => {

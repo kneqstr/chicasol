@@ -4,6 +4,8 @@ import { ThemeProvider } from "@/components/theme-provider";
 import "./globals.css";
 import { getLanguage } from "@/lib/translations/language";
 import { Toaster } from "@/components/ui/sonner";
+import { getPageContent } from "@/lib/translations/content";
+import { Footer } from "@/components/layout/footer";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -16,6 +18,8 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const lang = await getLanguage();
+  const content = await getPageContent("layout", lang);
+
   return (
     <html lang={lang} suppressHydrationWarning>
       <body>
@@ -28,6 +32,7 @@ export default async function RootLayout({
           <div className="min-h-screen flex flex-col">
             <NavbarWrapper />
             <main className="flex-1">{children}</main>
+            <Footer content={content.footer} />
             <Toaster
               position="top-center"
               closeButton={false}

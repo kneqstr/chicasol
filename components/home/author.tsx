@@ -41,18 +41,16 @@ export function AuthorSection({ content }: { content: AuthorSectionProps }) {
           </div>
 
           <div>
-            <Card className="overflow-hidden rounded-2xl shadow-lg">
-              <AspectRatio ratio={16 / 9}>
-                <iframe
-                  src={videoUrl}
-                  className="absolute inset-0 h-full w-full border-0 "
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                  allowFullScreen
-                  loading="lazy"
-                  title="Author Intro"
-                />
-              </AspectRatio>
-            </Card>
+            <AspectRatio ratio={16 / 9}>
+              <iframe
+                src={videoUrl}
+                className="absolute inset-0 h-full w-full border-0 rounded-3xl"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+                allowFullScreen
+                loading="lazy"
+                title="Author Intro"
+              />
+            </AspectRatio>
           </div>
         </div>
       </div>
