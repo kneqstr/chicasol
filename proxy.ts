@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { refreshAccessToken, verifyAccessToken } from "./lib/auth";
 
-const publicPaths = ["/", "/login", "/register", "/verify", "/complete-register", "/about"];
+const publicPaths = [
+  "/",
+  "/login",
+  "/register",
+  "/verify",
+  "/complete-register",
+  "/about",
+  "/resources",
+];
 const authPaths = ["/login", "/register", "/verify", "/complete-register"];
 const oauthPaths = ["/api/oauth", "/api/oauth/callback", "/api/send"];
 
