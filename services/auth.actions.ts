@@ -178,14 +178,14 @@ export async function completeRegistrationAction(
       email: email,
       password: hashedPassword,
       firstName: firstName,
-      lastName: lastName,
       phone: phone,
-      isVerified: true,
+      roles: ["user"],
     });
 
     const accessToken = await createAccessToken({
       sub: user._id.toString(),
       email: user.email,
+      roles: JSON.stringify(user.roles),
     });
 
     const refreshToken = await createRefreshToken({
@@ -244,6 +244,7 @@ export async function loginAction(prevState: BaseResult, formData: FormData): Pr
     const accessToken = await createAccessToken({
       sub: user._id.toString(),
       email: user.email,
+      roles: JSON.stringify(user.roles),
     });
 
     const refreshToken = await createRefreshToken({

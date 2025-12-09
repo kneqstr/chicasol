@@ -41,13 +41,16 @@ export async function GET(req: Request) {
       email: profile.email,
       password: hashedPassword,
       firstName: profile.given_name || profile.name,
-      lastName: profile.family_name,
       avatarUrl: profile.picture,
-      isVerified: profile.email_verified ?? true,
+      roles: ["user"],
     });
   }
 
-  const accessToken = await createAccessToken({ sub: user._id.toString(), email: user.email });
+  const accessToken = await createAccessToken({
+    sub: user._id.toString(),
+    email: user.email,
+    roles: JSON.stringify(user.roles),
+  });
   const refreshToken = await createRefreshToken({ sub: user._id.toString() });
 
   const hashedRefreshToken = await hashToken(refreshToken);
