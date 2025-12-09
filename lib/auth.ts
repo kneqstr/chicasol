@@ -8,7 +8,7 @@ import { IUser } from "@/models/user.model";
 const ACCESS_SECRET = new TextEncoder().encode(process.env.JWT_ACCESS_SECRET!);
 const REFRESH_SECRET = new TextEncoder().encode(process.env.JWT_REFRESH_SECRET!);
 
-export type JWTPayload = { sub: string; email: string; roles?: string[] };
+export type JWTPayload = { sub: string; email: string; roles: string };
 export type RefreshPayload = { sub: string };
 export type SetCookiesProps = { accessToken: string; refreshToken: string };
 export type RefreshResult = {
@@ -125,6 +125,7 @@ export async function refreshAccessToken(refreshToken: string): Promise<RefreshR
     const newAccessToken = await createAccessToken({
       sub: user._id.toString(),
       email: user.email,
+      roles: JSON.stringify(user.roles),
     });
 
     return {
