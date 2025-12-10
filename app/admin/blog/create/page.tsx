@@ -265,7 +265,7 @@ export default function CreateBlogPage() {
                           }
                           placeholder="Введите текст на русском..."
                           rows={block.type === "text" ? 6 : 2}
-                          className="min-h-[80px] resize-y"
+                          className="min-h-20 resize-y"
                         />
                       </div>
 
@@ -301,7 +301,7 @@ export default function CreateBlogPage() {
                           }
                           placeholder="Введіть текст українською..."
                           rows={block.type === "text" ? 6 : 2}
-                          className="min-h-[80px] resize-y"
+                          className="min-h-20 resize-y"
                         />
                       </div>
                     </div>
@@ -394,7 +394,7 @@ export default function CreateBlogPage() {
                 ))}
               </div>
 
-              <div className="flex-shrink-0">
+              <div className="shrink-0">
                 <Button type="submit" size="lg" disabled={isSubmitting} className="min-w-[140px]">
                   {isSubmitting ? "Создание..." : "Создать пост"}
                 </Button>

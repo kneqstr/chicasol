@@ -75,13 +75,16 @@ export async function setAuthCookies({ accessToken, refreshToken }: SetCookiesPr
 export async function getSession() {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("access_token")?.value;
-  if (!accessToken) return { isAuth: false };
+
+  if (!accessToken) return { isAuth: false, isAdmin: false };
 
   try {
-    await verifyAccessToken(accessToken);
-    return { isAuth: true };
+    const { roles } = await verifyAccessToken(accessToken);
+    const parserRoles = JSON.parse(roles);
+
+    return { isAuth: true, isAdmin: parserRoles.includes("admin") };
   } catch {
-    return { isAuth: false };
+    return { isAuth: false, isAdmin: false };
   }
 }
 
