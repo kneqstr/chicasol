@@ -24,6 +24,7 @@ const publicNavItems: INavItem[] = [
   { href: "/", lable: "На гловну" },
   { href: "/about", lable: "Про мене" },
   { href: "/resources", lable: "Матерiали" },
+  { href: "/blog", lable: "Блог" },
 ];
 const privateNavItems: INavItem[] = [{ href: "/course", lable: "Мої курси" }];
 
