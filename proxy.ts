@@ -9,6 +9,7 @@ const publicPaths = [
   "/complete-register",
   "/about",
   "/resources",
+  "/blog",
 ];
 const authPaths = ["/login", "/register", "/verify", "/complete-register"];
 const oauthPaths = ["/api/oauth", "/api/oauth/callback", "/api/send"];
@@ -18,7 +19,7 @@ export async function proxy(request: NextRequest) {
 
   const accessToken = request.cookies.get("access_token")?.value;
   const refreshToken = request.cookies.get("refresh_token")?.value;
-
+  const isAdminPath = pathname.startsWith("/admin");
   const isPublicPath = publicPaths.includes(pathname);
   const isAuthPath = authPaths.includes(pathname);
   const isAPIPath = pathname.startsWith("/api/");
@@ -26,6 +27,26 @@ export async function proxy(request: NextRequest) {
 
   if (isOAuthPath) {
     return NextResponse.next();
+  }
+
+  if (isAdminPath) {
+    if (!accessToken) {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
+
+    try {
+      const { roles } = await verifyAccessToken(accessToken);
+
+      const parserRoles = JSON.parse(roles);
+
+      if (!parserRoles.includes("admin")) {
+        return NextResponse.redirect(new URL("/", request.url));
+      }
+
+      return NextResponse.next();
+    } catch {
+      return NextResponse.redirect(new URL("/login", request.url));
+    }
   }
 
   if (isAuthPath && accessToken) {
@@ -81,6 +102,7 @@ export async function proxy(request: NextRequest) {
       }
       return NextResponse.next();
     }
+
     if (isAPIPath) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     } else {

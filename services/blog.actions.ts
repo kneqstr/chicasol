@@ -1,0 +1,88 @@
+"use server";
+
+import Blog from "@/models/blog.model";
+import { revalidatePath } from "next/cache";
+import { writeFile, mkdir } from "fs/promises";
+import slugify from "slugify";
+import path from "path";
+import type { IBlogBlock, MultilangText, BlogBlockType } from "@/models/blog.model";
+
+interface ProcessedBlock {
+  type: string;
+  content?: MultilangText;
+  tags?: { ru: string[]; uk: string[] };
+  imageUrl?: string;
+  order: number;
+}
+
+export async function createBlogPost(formData: FormData) {
+  try {
+    const titleRu = formData.get("title_ru") as string;
+    const titleUk = formData.get("title_uk") as string;
+
+    if (!titleRu || !titleUk) {
+      throw new Error("Title in both languages is required");
+    }
+
+    const authorId = "admin";
+
+    const slugRu = slugify(titleRu, { trim: true, lower: true, locale: "ru" });
+    const slugUk = slugify(titleUk, { trim: true, lower: true, locale: "uk" });
+
+    const blocksJson = formData.get("blocks") as string;
+    const blocks: ProcessedBlock[] = JSON.parse(blocksJson);
+
+    const uploadDir = path.join(process.cwd(), "public", "uploads", "blog");
+    await mkdir(uploadDir, { recursive: true });
+
+    const processedBlocks: IBlogBlock[] = [];
+
+    for (let i = 0; i < blocks.length; i++) {
+      const block = blocks[i];
+      const processedBlock: IBlogBlock = {
+        type: block.type as BlogBlockType,
+        order: block.order,
+      };
+
+      if (block.type === "image") {
+        const file = formData.get(`file_${i}`) as File | null;
+
+        if (file && file.size > 0) {
+          const buffer = Buffer.from(await file.arrayBuffer());
+          const uniquePrefix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+          const fileName = `${uniquePrefix}-${file.name.replace(/[^a-zA-Z0-9.]/g, "-")}`;
+          const filePath = path.join(uploadDir, fileName);
+
+          await writeFile(filePath, buffer);
+          processedBlock.imageUrl = `/uploads/blog/${fileName}`;
+        }
+      } else if (block.type === "tags") {
+        processedBlock.tags = [...(block.tags?.ru || []), ...(block.tags?.uk || [])];
+      } else if (block.content) {
+        processedBlock.content = block.content;
+      }
+
+      processedBlocks.push(processedBlock);
+    }
+
+    const blogPost = await Blog.create({
+      title: { ru: titleRu, uk: titleUk },
+      slug: { ru: slugRu, uk: slugUk },
+      blocks: processedBlocks,
+      authorId,
+    });
+
+    revalidatePath("/blog");
+    revalidatePath(`/blog/${slugRu}`);
+    revalidatePath(`/blog/${slugUk}`);
+
+    return {
+      success: true,
+      id: blogPost._id.toString(),
+      slug: { ru: slugRu, uk: slugUk },
+    };
+  } catch (error) {
+    console.error("Error creating blog post:", error);
+    throw new Error("Failed to create blog post");
+  }
+}

@@ -12,7 +12,7 @@ import { Menu } from "lucide-react";
 import { LanguageSwitcher } from "../language-switch";
 
 interface INavbar {
-  session: { isAuth: boolean };
+  session: { isAuth: boolean; isAdmin: boolean };
   lang: "uk" | "ru";
 }
 interface INavItem {
@@ -24,6 +24,7 @@ const publicNavItems: INavItem[] = [
   { href: "/", lable: "На гловну" },
   { href: "/about", lable: "Про мене" },
   { href: "/resources", lable: "Матерiали" },
+  { href: "/blog", lable: "Блог" },
 ];
 const privateNavItems: INavItem[] = [{ href: "/course", lable: "Мої курси" }];
 
@@ -71,6 +72,18 @@ export const Navbar = ({ session, lang }: INavbar) => {
                     <Link href={item.href}>{item.lable}</Link>
                   </Button>
                 ))}
+              {session.isAdmin && (
+                <Button
+                  asChild
+                  variant={pathname === "/admin" ? "secondary" : "ghost"}
+                  className={cn(
+                    "whitespace-nowrap",
+                    pathname === "/admin" && "bg-accent text-accent-foreground",
+                  )}
+                >
+                  <Link href="/admin">Admin</Link>
+                </Button>
+              )}
               <ModeToggle />
               <LanguageSwitcher lang={lang} />
             </div>
@@ -116,6 +129,7 @@ export const Navbar = ({ session, lang }: INavbar) => {
                       onClick={() => setIsOpen(false)}
                     />
                   ))}
+
                   {session.isAuth &&
                     privateNavItems.map((item) => (
                       <MobileNavItem
@@ -126,6 +140,19 @@ export const Navbar = ({ session, lang }: INavbar) => {
                         onClick={() => setIsOpen(false)}
                       />
                     ))}
+                  {session.isAdmin && (
+                    <Button
+                      asChild
+                      variant={pathname === "/admin" ? "secondary" : "ghost"}
+                      onClick={() => setIsOpen(false)}
+                      className={cn(
+                        "whitespace-nowrap",
+                        pathname === "/admin" && "bg-accent text-accent-foreground",
+                      )}
+                    >
+                      <Link href="/admin">Admin</Link>
+                    </Button>
+                  )}
                   <div className="flex items-center justify-end space-x-2 mx-4">
                     <ModeToggle />
                     <LanguageSwitcher lang={lang} />
