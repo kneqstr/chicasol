@@ -21,7 +21,7 @@ export default async function Admin() {
   }
   return (
     <div className="mt-20">
-      <Link href="/admin/blog">blog</Link>
+      <Link href="/admin/blog/create">create blogpost</Link>
     </div>
   );
 }
