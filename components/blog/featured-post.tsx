@@ -1,12 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { Language } from "@/lib/translations/language";
 import { IBlog } from "@/models/blog.model";
-
-import blankImg from "@/public/uploads/blog/1765414186926-49058369-air1.jpg";
 
 type BlogPostsProps = {
   lang: Language;
@@ -24,17 +21,6 @@ export function FeaturedPosts({ lang, posts }: BlogPostsProps) {
         {posts.slice(0, 3).map((post: IBlog) => (
           <Link key={post.slug} href={`/blog/${post.slug}`} className="block">
             <Card className="overflow-hidden">
-              {post.blocks.find((b) => b.type === "image")?.imageUrl && (
-                <div className="relative w-full h-40">
-                  <Image
-                    src={post.blocks.find((b) => b.type === "image")?.imageUrl || blankImg}
-                    alt=""
-                    fill
-                    className="object-cover"
-                  />
-                </div>
-              )}
-
               <div className="p-4 space-y-2">
                 <h3 className="font-semibold text-lg">{post.title?.[lang]}</h3>
                 <p className="text-sm text-muted-foreground">

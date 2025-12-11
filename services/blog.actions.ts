@@ -2,10 +2,9 @@
 
 import Blog from "@/models/blog.model";
 import { revalidatePath } from "next/cache";
-import { writeFile, mkdir } from "fs/promises";
 import slugify from "slugify";
-import path from "path";
 import type { IBlogBlock, MultilangText, BlogBlockType } from "@/models/blog.model";
+import { uploadToBunnyCDN } from "@/lib/bunny";
 
 interface ProcessedBlock {
   type: string;
@@ -40,9 +39,6 @@ export async function createBlogPost(formData: FormData) {
     const blocksJson = formData.get("blocks") as string;
     const blocks: ProcessedBlock[] = JSON.parse(blocksJson);
 
-    const uploadDir = path.join(process.cwd(), "public", "uploads", "blog");
-    await mkdir(uploadDir, { recursive: true });
-
     const processedBlocks: IBlogBlock[] = [];
 
     for (let i = 0; i < blocks.length; i++) {
@@ -56,13 +52,12 @@ export async function createBlogPost(formData: FormData) {
         const file = formData.get(`file_${i}`) as File | null;
 
         if (file && file.size > 0) {
-          const buffer = Buffer.from(await file.arrayBuffer());
-          const uniquePrefix = Date.now() + "-" + Math.round(Math.random() * 1e9);
-          const fileName = `${uniquePrefix}-${file.name.replace(/[^a-zA-Z0-9.]/g, "-")}`;
-          const filePath = path.join(uploadDir, fileName);
+          const uniquePrefix = Date.now() + Math.round(Math.random() * 100);
+          const safeName = file.name.replace(/[^a-zA-Z0-9.]/g, "-");
+          const storagePath = `blog/${uniquePrefix}-${safeName}`;
 
-          await writeFile(filePath, buffer);
-          processedBlock.imageUrl = `/uploads/blog/${fileName}`;
+          const cdnUrl = await uploadToBunnyCDN(file, storagePath);
+          processedBlock.imageUrl = cdnUrl;
         }
       } else if (block.type === "tags") {
         processedBlock.tags = [...(block.tags?.ru || []), ...(block.tags?.uk || [])];
