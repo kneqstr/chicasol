@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Image from "next/image";
 import { createBlogPost } from "@/services/blog.actions";
-import type { BlogBlockType, MultilangText } from "@/models/blog.model";
+import type { BlogBlockType } from "@/models/blog.model";
 import {
   Bold,
   Italic,
@@ -18,6 +18,7 @@ import {
   Image as ImageIcon,
   Tag,
 } from "lucide-react";
+import { MultilangText } from "@/types/common";
 
 interface LocalBlock {
   id: number;

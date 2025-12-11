@@ -1,8 +1,10 @@
 import mongoose, { Document, Schema } from "mongoose";
+import { MultilangText } from "@/types/common";
 
 export interface ICourse extends Document {
-  title: string;
-  description: string;
+  name: string;
+  title: MultilangText;
+  description: MultilangText;
   price: number;
   thumbnailUrl?: string;
   isPublished: boolean;
@@ -10,10 +12,19 @@ export interface ICourse extends Document {
   updatedAt: Date;
 }
 
+const MultilangSchema = new Schema<MultilangText>(
+  {
+    ru: { type: String, required: true },
+    uk: { type: String, required: true },
+  },
+  { _id: false },
+);
+
 const CourseSchema = new Schema<ICourse>(
   {
-    title: { type: String, required: true },
-    description: { type: String, required: true },
+    name: { type: String, required: true, unique: true },
+    title: { type: MultilangSchema, required: true },
+    description: { type: MultilangSchema, required: true },
     price: { type: Number, required: true, min: 0 },
     thumbnailUrl: { type: String },
     isPublished: { type: Boolean, default: false },

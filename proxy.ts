@@ -10,6 +10,7 @@ const publicPaths = [
   "/about",
   "/resources",
   "/blog",
+  "/courses",
 ];
 const authPaths = ["/login", "/register", "/verify", "/complete-register"];
 const oauthPaths = ["/api/oauth", "/api/oauth/callback", "/api/send"];
