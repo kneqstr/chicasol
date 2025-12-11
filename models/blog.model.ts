@@ -1,11 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
+import { MultilangText } from "@/types/common";
 
 export type BlogBlockType = "h2" | "h3" | "h4" | "text" | "image" | "tags";
-
-export interface MultilangText {
-  ru: string;
-  uk: string;
-}
 
 export interface IBlogBlock {
   type: BlogBlockType;

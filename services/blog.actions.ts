@@ -3,8 +3,9 @@
 import Blog from "@/models/blog.model";
 import { revalidatePath } from "next/cache";
 import slugify from "slugify";
-import type { IBlogBlock, MultilangText, BlogBlockType } from "@/models/blog.model";
+import type { IBlogBlock, BlogBlockType } from "@/models/blog.model";
 import { uploadToBunnyCDN } from "@/lib/bunny";
+import { MultilangText } from "@/types/common";
 
 interface ProcessedBlock {
   type: string;
