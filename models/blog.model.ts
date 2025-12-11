@@ -17,7 +17,7 @@ export interface IBlogBlock {
 
 export interface IBlog extends Document {
   title: MultilangText;
-  slug: MultilangText;
+  slug: string;
   blocks: IBlogBlock[];
   createdAt: Date;
   updatedAt: Date;
@@ -46,7 +46,7 @@ const BlogBlockSchema = new Schema<IBlogBlock>(
 const BlogSchema = new Schema<IBlog>(
   {
     title: { type: MultilangSchema, required: true },
-    slug: { type: MultilangSchema, required: true, unique: true },
+    slug: { type: String, required: true, unique: true },
     blocks: { type: [BlogBlockSchema], default: [] },
     authorId: { type: String, required: true },
   },
@@ -57,8 +57,6 @@ const BlogSchema = new Schema<IBlog>(
   },
 );
 
-BlogSchema.index({ "slug.ru": 1 });
-BlogSchema.index({ "slug.uk": 1 });
 BlogSchema.index({ authorId: 1 });
 BlogSchema.index({ createdAt: -1 });
 

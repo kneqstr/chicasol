@@ -176,7 +176,7 @@ export default function CreateBlogPage() {
   }
 
   return (
-    <div className="mt-20 max-w-4xl mx-auto px-4 pb-20">
+    <div className="mt-20 max-w-5xl mx-auto px-4 pb-20">
       <h1 className="text-3xl font-bold mb-8">Создать пост</h1>
 
       <form ref={formRef} onSubmit={submitForm} className="space-y-8">
@@ -326,6 +326,8 @@ export default function CreateBlogPage() {
                         <div className="mt-4">
                           <p className="text-sm text-muted-foreground mb-2">Предпросмотр:</p>
                           <Image
+                            width={100}
+                            height={100}
                             src={block.imageUrl}
                             className="max-w-full h-auto max-h-80 rounded-lg border object-contain"
                             alt="Preview"
@@ -372,7 +374,7 @@ export default function CreateBlogPage() {
                 </div>
               </div>
             ))}
-            <div className="flex  items-center justify-between gap-4 border-t pt-10">
+            <div className="flex items-center justify-between gap-4 border-t pt-10">
               <div className="flex  gap-2 overflow-x-auto pb-2">
                 {blockTypes.map((b) => (
                   <Button

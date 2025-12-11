@@ -20,7 +20,9 @@ export async function proxy(request: NextRequest) {
   const accessToken = request.cookies.get("access_token")?.value;
   const refreshToken = request.cookies.get("refresh_token")?.value;
   const isAdminPath = pathname.startsWith("/admin");
-  const isPublicPath = publicPaths.includes(pathname);
+  const isPublicPath = publicPaths.some(
+    (path) => pathname === path || pathname.startsWith(path + "/"),
+  );
   const isAuthPath = authPaths.includes(pathname);
   const isAPIPath = pathname.startsWith("/api/");
   const isOAuthPath = oauthPaths.some((path) => pathname.startsWith(path));
