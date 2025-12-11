@@ -21,13 +21,21 @@ export async function createBlogPost(formData: FormData) {
     const titleUk = formData.get("title_uk") as string;
 
     if (!titleRu || !titleUk) {
-      throw new Error("Title in both languages is required");
+      return {
+        success: false,
+      };
     }
 
     const authorId = "admin";
 
-    const slugRu = slugify(titleRu, { trim: true, lower: true, locale: "ru" });
-    const slugUk = slugify(titleUk, { trim: true, lower: true, locale: "uk" });
+    const slugRu = slugify(titleRu, {
+      trim: true,
+      lower: true,
+      locale: "ru",
+      remove: /[^a-z0-9 -]/gi,
+    });
+
+    const uniqueSlug = slugRu + Math.round(Math.random() * 100);
 
     const blocksJson = formData.get("blocks") as string;
     const blocks: ProcessedBlock[] = JSON.parse(blocksJson);
@@ -67,19 +75,18 @@ export async function createBlogPost(formData: FormData) {
 
     const blogPost = await Blog.create({
       title: { ru: titleRu, uk: titleUk },
-      slug: { ru: slugRu, uk: slugUk },
+      slug: uniqueSlug,
       blocks: processedBlocks,
       authorId,
     });
 
     revalidatePath("/blog");
-    revalidatePath(`/blog/${slugRu}`);
-    revalidatePath(`/blog/${slugUk}`);
+    revalidatePath(`/blog/${uniqueSlug}`);
 
     return {
       success: true,
       id: blogPost._id.toString(),
-      slug: { ru: slugRu, uk: slugUk },
+      slug: uniqueSlug,
     };
   } catch (error) {
     console.error("Error creating blog post:", error);

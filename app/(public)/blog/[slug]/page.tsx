@@ -9,11 +9,7 @@ export default async function BlogPostPage({ params }: { params: Promise<{ slug:
   const lang = await getLanguage();
   const { slug } = await params;
 
-  const post: IBlog | null = await Blog.findOne({
-    [`slug.${lang}`]: slug,
-  })
-    .lean()
-    .exec();
+  const post: IBlog | null = await Blog.findOne({ slug }).lean();
 
   if (!post) {
     return <div className="p-10 text-center">Пост не найден</div>;
