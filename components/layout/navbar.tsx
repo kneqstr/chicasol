@@ -27,7 +27,7 @@ const publicNavItems: INavItem[] = [
   { href: "/blog", lable: "Блог" },
   { href: "/courses", lable: "Курси" },
 ];
-const privateNavItems: INavItem[] = [{ href: "/course", lable: "Мої курси" }];
+const privateNavItems: INavItem[] = [{ href: "/my-courses", lable: "Мої курси" }];
 
 export const Navbar = ({ session, lang }: INavbar) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
