@@ -8,7 +8,7 @@ export default async function ResoursesPage() {
   const content = await getPageContent("resources", lang);
 
   return (
-    <div className="mt-20">
+    <div className="mt-20 min-h-screen">
       <ResourcesHero content={content.resHero} />
     </div>
   );

@@ -16,7 +16,7 @@ export default async function BlogPage() {
   const posts = JSON.parse(JSON.stringify(postsRaw));
 
   return (
-    <div className="mt-20">
+    <div className="mt-20 min-h-screen">
       <BlogHero content={content.blog_page.hero} />
       <FeaturedPosts posts={posts} lang={lang} />
       <BlogPosts lang={lang} posts={posts} />
