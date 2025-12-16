@@ -2,6 +2,7 @@ import Course, { ICourse } from "@/models/course.model";
 import { getLanguage } from "@/lib/translations/language";
 import { connectDB } from "@/lib/db";
 import CourseCard from "@/components/courses/course-card";
+import { BuyButton } from "@/components/courses/buy-button";
 
 export default async function AboutCourses() {
   await connectDB();
@@ -21,7 +22,10 @@ export default async function AboutCourses() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {courses.map((course: ICourse) => (
-          <CourseCard key={course._id.toString()} course={course} lang={lang} />
+          <div key={course._id.toString()}>
+            <CourseCard key={course._id.toString()} course={course} lang={lang} />
+            <BuyButton courseId={course._id.toString()} />
+          </div>
         ))}
       </div>
     </div>

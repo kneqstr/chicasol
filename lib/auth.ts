@@ -3,7 +3,7 @@ import { SignJWT, jwtVerify } from "jose";
 import { cookies } from "next/headers";
 import { connectDB } from "./db";
 import sessionModel from "@/models/session.model";
-import { IUser } from "@/models/user.model";
+import userModel, { IUser } from "@/models/user.model";
 
 const ACCESS_SECRET = new TextEncoder().encode(process.env.JWT_ACCESS_SECRET!);
 const REFRESH_SECRET = new TextEncoder().encode(process.env.JWT_REFRESH_SECRET!);
@@ -70,6 +70,25 @@ export async function setAuthCookies({ accessToken, refreshToken }: SetCookiesPr
     sameSite: "lax",
     secure: process.env.COOKIE_SECURE === "true",
   });
+}
+export async function getCurrentUser(): Promise<IUser | null> {
+  try {
+    await connectDB();
+    const cookieStore = await cookies();
+    const accessToken = cookieStore.get("access_token")?.value;
+
+    if (!accessToken) return null;
+
+    const payload = await verifyAccessToken(accessToken);
+
+    if (!payload?.sub) return null;
+
+    const user = await userModel.findById(payload.sub);
+    return user;
+  } catch (error) {
+    console.error("Auth error:", error);
+    return null;
+  }
 }
 
 export async function getSession() {
