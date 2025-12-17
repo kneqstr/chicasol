@@ -8,6 +8,7 @@ export interface IUserCourse extends Document {
   progress: number;
   completedLessons: string[];
   isCompleted: boolean;
+  isActive: boolean;
 }
 
 const UserCourseSchema = new Schema<IUserCourse>(
@@ -19,6 +20,7 @@ const UserCourseSchema = new Schema<IUserCourse>(
     progress: { type: Number, default: 0 },
     completedLessons: { type: [String], default: [] },
     isCompleted: { type: Boolean, default: false },
+    isActive: { type: Boolean, default: true },
   },
   { timestamps: true },
 );

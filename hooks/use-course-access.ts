@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 
 interface CourseAccessData {
@@ -19,7 +18,6 @@ export function useCourseAccess(courseId: string): CourseAccessData {
     async function checkAccess() {
       try {
         const response = await fetch(`/api/courses/${courseId}/access`);
-
         if (response.ok) {
           const data = await response.json();
           setAccessData({
@@ -35,7 +33,6 @@ export function useCourseAccess(courseId: string): CourseAccessData {
           });
         }
       } catch (error) {
-        console.error("Error checking course access:", error);
         setAccessData({
           hasAccess: false,
           isPurchased: false,
@@ -43,7 +40,6 @@ export function useCourseAccess(courseId: string): CourseAccessData {
         });
       }
     }
-
     if (courseId) {
       checkAccess();
     }

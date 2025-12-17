@@ -1,4 +1,3 @@
-// lib/wayforpay/utils.ts
 import crypto from "crypto";
 import { WAYFORPAY_CONFIG } from "./config";
 
@@ -78,14 +77,11 @@ export function generatePurchaseSignature(request: WayForPayPurchaseRequest): st
     ...request.productCount.map((count) => count.toString()),
     ...request.productPrice.map((price) => price.toString()),
   ];
-
   return generateSignature(params);
 }
 
 export function verifyCallbackSignature(data: WayForPayCallbackRequest): boolean {
   try {
-    // Согласно документации WayForPay, для callback подпись формируется из:
-    // merchantAccount;orderReference;amount;currency;authCode;cardPan;transactionStatus;reasonCode
     const params = [
       data.merchantAccount,
       data.orderReference,
@@ -96,119 +92,31 @@ export function verifyCallbackSignature(data: WayForPayCallbackRequest): boolean
       data.transactionStatus,
       data.reasonCode.toString(),
     ];
-
     const concatenatedString = params.join(";");
     const expectedSignature = crypto
       .createHmac("md5", WAYFORPAY_CONFIG.MERCHANT_SECRET)
       .update(concatenatedString)
       .digest("hex")
       .toLowerCase();
-
-    console.log("Concatenated string for signature:", concatenatedString);
-    console.log("Expected signature:", expectedSignature);
-    console.log("Received signature:", data.merchantSignature);
-
     return expectedSignature === data.merchantSignature.toLowerCase();
   } catch (error) {
-    console.error("Error verifying signature:", error);
     return false;
   }
 }
 
-// Альтернативный вариант (иногда нужен другой порядок параметров)
-export function verifyCallbackSignatureAlternative(data: WayForPayCallbackRequest): boolean {
-  try {
-    // Альтернативный порядок параметров (попробуйте если первый не работает)
-    const params = [
-      data.merchantAccount,
-      data.orderReference,
-      data.amount.toString(),
-      data.currency,
-      data.cardPan,
-      data.transactionStatus,
-      data.reasonCode.toString(),
-    ];
-
-    const concatenatedString = params.join(";");
-    const expectedSignature = crypto
-      .createHmac("md5", WAYFORPAY_CONFIG.MERCHANT_SECRET)
-      .update(concatenatedString)
-      .digest("hex")
-      .toLowerCase();
-
-    console.log("Alternative concatenated string:", concatenatedString);
-    console.log("Alternative expected signature:", expectedSignature);
-
-    return expectedSignature === data.merchantSignature.toLowerCase();
-  } catch (error) {
-    console.error("Error verifying alternative signature:", error);
-    return false;
-  }
-}
-
-// Еще один вариант (иногда без authCode)
-export function verifyCallbackSignatureSimple(data: WayForPayCallbackRequest): boolean {
-  try {
-    // Самый простой вариант
-    const params = [
-      data.merchantAccount,
-      data.orderReference,
-      data.amount.toString(),
-      data.currency,
-      data.transactionStatus,
-      data.reasonCode.toString(),
-    ];
-
-    const concatenatedString = params.join(";");
-    const expectedSignature = crypto
-      .createHmac("md5", WAYFORPAY_CONFIG.MERCHANT_SECRET)
-      .update(concatenatedString)
-      .digest("hex")
-      .toLowerCase();
-
-    console.log("Simple concatenated string:", concatenatedString);
-    console.log("Simple expected signature:", expectedSignature);
-
-    return expectedSignature === data.merchantSignature.toLowerCase();
-  } catch (error) {
-    console.error("Error verifying simple signature:", error);
-    return false;
-  }
-}
-
-// Универсальная проверка - пробуем все варианты
-export function verifyCallbackSignatureUniversal(data: WayForPayCallbackRequest): boolean {
-  const signature1 = verifyCallbackSignature(data);
-  const signature2 = verifyCallbackSignatureAlternative(data);
-  const signature3 = verifyCallbackSignatureSimple(data);
-
-  console.log("Signature verification results:", {
-    method1: signature1,
-    method2: signature2,
-    method3: signature3,
-  });
-
-  return signature1 || signature2 || signature3;
-}
-
-// Генерация ответа для serviceUrl
 export function generateServiceResponse(
   orderReference: string,
   status: "accept" | "decline" = "accept",
 ): WayForPayServiceCallbackResponse {
   const responseTime = Math.floor(Date.now() / 1000);
-
   const responseData: WayForPayServiceCallbackResponse = {
     orderReference,
     status,
     time: responseTime,
     signature: "",
   };
-
   const params = [responseData.orderReference, responseData.status, responseData.time.toString()];
-
   responseData.signature = generateSignature(params);
-
   return responseData;
 }
 

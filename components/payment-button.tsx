@@ -1,73 +1,56 @@
-// components/payment-button.tsx
 "use client";
-
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { XCircle, CheckCircle } from "lucide-react";
 import { createPayment } from "@/services/payment.action";
-
 interface PaymentButtonProps {
   courseId: string;
   coursePrice: number;
   className?: string;
 }
-
 export function PaymentButton({ courseId, coursePrice, className = "" }: PaymentButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const router = useRouter();
   const searchParams = useSearchParams();
-
-  // Проверяем параметры URL для сообщений об ошибках/успехе
   useEffect(() => {
     const paymentError = searchParams.get("payment_error");
     const paymentSuccess = searchParams.get("payment_success");
-
     if (paymentError) {
-      setError(decodeURIComponent(paymentError));
-      // Очищаем параметр из URL
+      // setError(decodeURIComponent(paymentError));
       const newUrl = new URL(window.location.href);
       newUrl.searchParams.delete("payment_error");
       window.history.replaceState({}, "", newUrl.toString());
     }
-
     if (paymentSuccess) {
-      setSuccess(decodeURIComponent(paymentSuccess));
+      // setSuccess(decodeURIComponent(paymentSuccess));
       const newUrl = new URL(window.location.href);
       newUrl.searchParams.delete("payment_success");
       window.history.replaceState({}, "", newUrl.toString());
     }
   }, [searchParams]);
-
   const handlePayment = async () => {
     try {
       setIsLoading(true);
       setError(null);
       setSuccess(null);
-
-      // Вызываем server action
       const result = await createPayment({ courseId });
-
       if (!result.success) {
-        throw new Error("Failed to create payment");
+        setError("Failed create payment");
+        setIsLoading(false);
+        return;
       }
-
-      // Создаем скрытую форму для отправки на WayForPay
       const form = document.createElement("form");
       form.method = "POST";
-      form.action = result.wayforpayUrl;
+      form.action = result.wayforpayUrl!;
       form.style.display = "none";
-
-      // Добавляем все поля формы
-      Object.entries(result.formData).forEach(([key, value]) => {
+      Object.entries(result.formData!).forEach(([key, value]) => {
         if (value !== undefined && value !== null) {
           const input = document.createElement("input");
           input.type = "hidden";
           input.name = key;
-
           if (Array.isArray(value)) {
-            // Для массивов создаем несколько полей
             value.forEach((item, index) => {
               const arrayInput = document.createElement("input");
               arrayInput.type = "hidden";
@@ -81,38 +64,33 @@ export function PaymentButton({ courseId, coursePrice, className = "" }: Payment
           }
         }
       });
-
       document.body.appendChild(form);
       form.submit();
     } catch (error) {
-      console.error("Payment error:", error);
       setError(error instanceof Error ? error.message : "Payment failed. Please try again.");
       setIsLoading(false);
     }
   };
-
   return (
     <div className="flex flex-col gap-3">
       {error && (
         <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-          <XCircle className="h-5 w-5 text-red-600 flex-shrink-0" />
+          <XCircle className="h-5 w-5 text-red-600 shrink-0" />
           <div>
             <p className="text-sm font-medium text-red-800">Помилка оплати</p>
             <p className="text-sm text-red-600">{error}</p>
           </div>
         </div>
       )}
-
       {success && (
         <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
-          <CheckCircle className="h-5 w-5 text-green-600 flex-shrink-0" />
+          <CheckCircle className="h-5 w-5 text-green-600 shrink-0" />
           <div>
             <p className="text-sm font-medium text-green-800">Оплата успішна!</p>
             <p className="text-sm text-green-600">{success}</p>
           </div>
         </div>
       )}
-
       <button
         onClick={handlePayment}
         disabled={isLoading}
@@ -146,7 +124,6 @@ export function PaymentButton({ courseId, coursePrice, className = "" }: Payment
           `Купити за ${coursePrice} ₴`
         )}
       </button>
-
       <p className="text-xs text-gray-500 text-center">
         Після натискання кнопки вас буде перенаправлено на сторінку безпечної оплати WayForPay
       </p>
