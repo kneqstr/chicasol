@@ -11,11 +11,12 @@ const publicPaths = [
   "/resources",
   "/blog",
   "/courses",
+  "/payment/return",
 ];
 const authPaths = ["/login", "/register", "/verify", "/complete-register"];
 const oauthPaths = ["/api/oauth", "/api/oauth/callback", "/api/send"];
 
-const publicApi = ["/api/ok"];
+const publicApi = ["/api/wayforpay/callback"];
 
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -33,9 +34,11 @@ export async function proxy(request: NextRequest) {
   if (isOAuthPath) {
     return NextResponse.next();
   }
+
   if (isPublicApi) {
     return NextResponse.next();
   }
+
   if (isAdminPath) {
     if (!accessToken) {
       return NextResponse.redirect(new URL("/login", request.url));
