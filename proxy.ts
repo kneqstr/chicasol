@@ -15,9 +15,11 @@ const publicPaths = [
 const authPaths = ["/login", "/register", "/verify", "/complete-register"];
 const oauthPaths = ["/api/oauth", "/api/oauth/callback", "/api/send"];
 
+const publicApi = ["/api/ok"];
+
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
-
+  const isPublicApi = publicApi.includes(pathname);
   const accessToken = request.cookies.get("access_token")?.value;
   const refreshToken = request.cookies.get("refresh_token")?.value;
   const isAdminPath = pathname.startsWith("/admin");
@@ -31,7 +33,9 @@ export async function proxy(request: NextRequest) {
   if (isOAuthPath) {
     return NextResponse.next();
   }
-
+  if (isPublicApi) {
+    return NextResponse.next();
+  }
   if (isAdminPath) {
     if (!accessToken) {
       return NextResponse.redirect(new URL("/login", request.url));
