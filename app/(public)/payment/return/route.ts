@@ -6,20 +6,20 @@ export async function POST(request: NextRequest) {
     const orderReference = formData.get("orderReference") as string;
     const transactionStatus = formData.get("transactionStatus") as string;
     const reason = formData.get("reason") as string;
+
     if (transactionStatus === "Approved") {
-      return NextResponse.redirect(new URL("/my-courses", request.url));
+      console.log("approved, go to my-courses");
+      return NextResponse.redirect(new URL("/my-courses", request.url), { status: 303 });
     } else {
       const redirectUrl = new URL("/courses", request.url);
       if (reason) {
         redirectUrl.searchParams.set("payment_error", encodeURIComponent(reason));
       }
-      return NextResponse.redirect(redirectUrl);
+      console.log("not approved, go to courses");
+      return NextResponse.redirect(redirectUrl, { status: 303 });
     }
   } catch (error) {
-    return NextResponse.redirect(new URL("/courses", request.url));
+    console.log("just error, go to courses");
+    return NextResponse.redirect(new URL("/courses", request.url), { status: 303 });
   }
-}
-
-export async function GET(request: NextRequest) {
-  return NextResponse.redirect(new URL("/courses", request.url));
 }
