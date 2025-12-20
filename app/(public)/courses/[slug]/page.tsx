@@ -26,7 +26,7 @@ export default async function CourseDetails({ params }: { params: Promise<{ slug
 
   return (
     <div className="max-w-5xl mx-auto py-16 px-4">
-      <VideosAccordion videos={videos} lang={lang} courseName={course.name} />
+      <VideosAccordion videos={videos} lang={lang} />
     </div>
   );
 }

@@ -1,7 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { XCircle, CheckCircle } from "lucide-react";
+import { useState } from "react";
 import { createPayment } from "@/services/payment.action";
 interface PaymentButtonProps {
   courseId: string;
@@ -10,34 +8,12 @@ interface PaymentButtonProps {
 }
 export function PaymentButton({ courseId, coursePrice, className = "" }: PaymentButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [success, setSuccess] = useState<string | null>(null);
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  useEffect(() => {
-    const paymentError = searchParams.get("payment_error");
-    const paymentSuccess = searchParams.get("payment_success");
-    if (paymentError) {
-      // setError(decodeURIComponent(paymentError));
-      const newUrl = new URL(window.location.href);
-      newUrl.searchParams.delete("payment_error");
-      window.history.replaceState({}, "", newUrl.toString());
-    }
-    if (paymentSuccess) {
-      // setSuccess(decodeURIComponent(paymentSuccess));
-      const newUrl = new URL(window.location.href);
-      newUrl.searchParams.delete("payment_success");
-      window.history.replaceState({}, "", newUrl.toString());
-    }
-  }, [searchParams]);
+
   const handlePayment = async () => {
     try {
       setIsLoading(true);
-      setError(null);
-      setSuccess(null);
       const result = await createPayment({ courseId });
       if (!result.success) {
-        setError("Failed create payment");
         setIsLoading(false);
         return;
       }
@@ -67,34 +43,15 @@ export function PaymentButton({ courseId, coursePrice, className = "" }: Payment
       document.body.appendChild(form);
       form.submit();
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Payment failed. Please try again.");
       setIsLoading(false);
     }
   };
   return (
     <div className="flex flex-col gap-3">
-      {error && (
-        <div className="flex items-center gap-2 p-3 bg-red-50 border border-red-200 rounded-lg">
-          <XCircle className="h-5 w-5 text-red-600 shrink-0" />
-          <div>
-            <p className="text-sm font-medium text-red-800">Помилка оплати</p>
-            <p className="text-sm text-red-600">{error}</p>
-          </div>
-        </div>
-      )}
-      {success && (
-        <div className="flex items-center gap-2 p-3 bg-green-50 border border-green-200 rounded-lg">
-          <CheckCircle className="h-5 w-5 text-green-600 shrink-0" />
-          <div>
-            <p className="text-sm font-medium text-green-800">Оплата успішна!</p>
-            <p className="text-sm text-green-600">{success}</p>
-          </div>
-        </div>
-      )}
       <button
         onClick={handlePayment}
         disabled={isLoading}
-        className={`px-6 py-3 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${className}`}
+        className={`px-6 py-3 cursor-pointer bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${className}`}
       >
         {isLoading ? (
           <>

@@ -3,15 +3,13 @@
 import { useState } from "react";
 import { IVideo } from "@/models/video.model";
 import { Language } from "@/lib/translations/language";
-import Link from "next/link";
 
 interface VideosAccordionProps {
   videos: IVideo[];
   lang: Language;
-  courseName: string;
 }
 
-export default function VideosAccordion({ videos, lang, courseName }: VideosAccordionProps) {
+export default function VideosAccordion({ videos, lang }: VideosAccordionProps) {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
   const toggle = (index: number) => {
@@ -34,12 +32,7 @@ export default function VideosAccordion({ videos, lang, courseName }: VideosAcco
           {openIndex === index && (
             <div className="px-5 pb-4 text-gray-600 space-y-2">
               <p></p>
-              <Link
-                href={`/courses/${courseName}/${video.slug}`}
-                className="text-primary underline text-sm"
-              >
-                {video.description[lang]}
-              </Link>
+              <div className="text-primary underline text-sm">{video.description[lang]}</div>
               <p className="text-sm text-gray-500">{video.subdescription[lang]}</p>
 
               {video.tags.length > 0 && (

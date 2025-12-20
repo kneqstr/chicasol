@@ -18,25 +18,25 @@ interface CreatePaymentParams {
 }
 
 export async function createPayment({ courseId }: CreatePaymentParams) {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+  if (!accessToken) {
+    redirect("/login");
+  }
+  const payload = await verifyAccessToken(accessToken);
+  const userId = payload.sub;
+  await connectDB();
+  const existingPurchase = await Purchase.findOne({
+    user: userId,
+    course: courseId,
+    status: { $in: ["paid", "pending"] },
+  });
+  if (existingPurchase) {
+    if (existingPurchase.status === "paid") {
+      redirect("/my-courses");
+    }
+  }
   try {
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get("access_token")?.value;
-    if (!accessToken) {
-      redirect("/login");
-    }
-    const payload = await verifyAccessToken(accessToken);
-    const userId = payload.sub;
-    await connectDB();
-    const existingPurchase = await Purchase.findOne({
-      user: userId,
-      course: courseId,
-      status: { $in: ["paid", "pending"] },
-    });
-    if (existingPurchase) {
-      if (existingPurchase.status === "paid") {
-        redirect("/my-courses");
-      }
-    }
     const course = await Course.findById(courseId);
     if (!course) {
       return { success: false };
