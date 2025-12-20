@@ -1,5 +1,18 @@
-import mongoose, { Document, Schema } from "mongoose";
+import mongoose, { Document, Schema, Types } from "mongoose";
 import { MultilangText } from "@/types/common";
+
+export type UserCourseLean = {
+  _id: Types.ObjectId;
+  course: {
+    _id: Types.ObjectId;
+    name: string;
+    title: MultilangText;
+    description: MultilangText;
+    price: number;
+    thumbnailUrl?: string;
+    isPublished: boolean;
+  };
+};
 
 export interface ICourse extends Document {
   name: string;
