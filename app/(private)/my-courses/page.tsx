@@ -9,6 +9,7 @@ import Image from "next/image";
 
 export default async function MyCourses() {
   await connectDB();
+  await Course.findOne({});
   const userId = await getUser();
   const lang = await getLanguage();
   const purchases = await UserCourse.find({ user: userId })
