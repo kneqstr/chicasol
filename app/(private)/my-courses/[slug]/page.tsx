@@ -25,9 +25,18 @@ export default async function CourseEntryPage({ params }: { params: Promise<{ sl
 
   if (!videos.length) redirect("/404");
 
-  const lastSlug = userCourse.completedLessons?.[userCourse.completedLessons.length - 1];
+  let targetVideo = videos[0];
 
-  const targetVideo = videos.find((v) => v.slug === lastSlug) ?? videos[0];
+  if (userCourse.completedLessons?.length > 0) {
+    const lastCompletedSlug = userCourse.completedLessons[userCourse.completedLessons.length - 1];
+    const lastCompletedIndex = videos.findIndex((v) => v.slug === lastCompletedSlug);
+
+    if (lastCompletedIndex >= 0 && lastCompletedIndex + 1 < videos.length) {
+      targetVideo = videos[lastCompletedIndex + 1];
+    } else {
+      targetVideo = videos.find((v) => !userCourse.completedLessons?.includes(v.slug)) || videos[0];
+    }
+  }
 
   redirect(`/my-courses/${slug}/${targetVideo.slug}`);
 }
