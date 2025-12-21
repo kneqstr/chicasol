@@ -1,44 +1,33 @@
-import ProtectedVideo from "@/components/protected-component";
-import { verifyAccessToken } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
-import { getLanguage } from "@/lib/translations/language";
+import { getUser } from "@/lib/auth";
 import Course from "@/models/course.model";
-import UserCourse, { IUserCourse } from "@/models/usercourse.model";
-import Video, { IVideo } from "@/models/video.model";
-import { cookies } from "next/headers";
+import UserCourse from "@/models/usercourse.model";
+import Video from "@/models/video.model";
 import { redirect } from "next/navigation";
 
-export default async function VideoPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function CourseEntryPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const lang = await getLanguage();
+
   await connectDB();
-  const cookieStore = await cookies();
-  const accessToken = cookieStore.get("access_token")?.value;
+  const userId = await getUser();
 
-  if (!accessToken) redirect("/login");
+  const course = await Course.findOne({ name: slug }).lean();
+  if (!course) redirect("/404");
 
-  const { sub } = await verifyAccessToken(accessToken);
+  const userCourse = await UserCourse.findOne({
+    user: userId,
+    course: course._id,
+  }).lean();
 
-  const courseDoc = await Course.findOne({ name: slug }).lean();
+  if (!userCourse) redirect("/access-denied");
 
-  if (!courseDoc) return <div className="mt-20">Course not found</div>;
+  const videos = await Video.find({ courseId: course._id }).sort({ order: 1 }).lean();
 
-  const boughtCours = await UserCourse.findOne<IUserCourse>({ user: sub, course: courseDoc._id });
-  if (!boughtCours?.isActive) return <div className="mt-20">access denied</div>;
+  if (!videos.length) redirect("/404");
 
-  const rawVideos: IVideo[] = await Video.find({
-    courseId: courseDoc._id,
-  })
-    .sort({ order: 1 })
-    .lean();
+  const lastSlug = userCourse.completedLessons?.[userCourse.completedLessons.length - 1];
 
-  return (
-    <div className="max-w-5xl mx-auto py-16 px-4 space-y-6">
-      <div className="flex space-x-2">
-        {rawVideos.map((r) => (
-          <ProtectedVideo key={r._id.toString()} videoId={r.videoId} />
-        ))}
-      </div>
-    </div>
-  );
+  const targetVideo = videos.find((v) => v.slug === lastSlug) ?? videos[0];
+
+  redirect(`/my-courses/${slug}/${targetVideo.slug}`);
 }

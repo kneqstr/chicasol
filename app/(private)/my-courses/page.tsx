@@ -1,57 +1,57 @@
-import { getUser } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
+import { getUser } from "@/lib/auth";
 import { getLanguage } from "@/lib/translations/language";
-import { UserCourseLean } from "@/models/course.model";
-import Course from "@/models/course.model";
+import Course, { ICourse } from "@/models/course.model";
 import UserCourse from "@/models/usercourse.model";
 import Link from "next/link";
 import Image from "next/image";
 
-export default async function MyCourses() {
+export default async function MyCoursesPage() {
   await connectDB();
-  await Course.findOne({});
+
   const userId = await getUser();
   const lang = await getLanguage();
-  const purchases = await UserCourse.find({ user: userId })
+  await Course.findOne({});
+  const purchases = await UserCourse.find({ user: userId, isActive: true })
     .populate("course")
-    .lean<UserCourseLean[]>();
+    .lean();
 
-  if (!purchases) {
+  if (!purchases?.length) {
     return (
-      <div className="mt-20 min-h-screen">
-        <h1>У вас не покупок</h1>
+      <div className="mt-20 text-center">
+        <h1 className="text-xl font-semibold">У вас пока нет курсов</h1>
       </div>
     );
   }
 
   return (
-    <div className="mt-20 min-h-screen">
-      <div className="max-w-md mx-auto">
-        {purchases.map((p) => (
-          <div
+    <div className="max-w-6xl mx-auto py-16 px-4 grid md:grid-cols-3 gap-6">
+      {purchases.map((p) => {
+        const course = p.course as ICourse;
+        return (
+          <Link
             key={p._id.toString()}
-            className="rounded-xl overflow-hidden shadow-lg  hover:shadow-xl transition-all duration-300 border"
+            href={`/my-courses/${course.name}`}
+            className="group rounded-xl overflow-hidden border shadow-sm hover:shadow-md transition"
           >
-            <Link href={`/my-courses/${p.course?.name}`}>
-              <div className="relative w-full h-56">
-                <Image
-                  src={p.course?.thumbnailUrl || "/placeholder-course.jpg"}
-                  alt={p.course?.title[lang]}
-                  fill
-                  className="object-cover"
-                />
-              </div>
+            <div className="relative h-48">
+              <Image
+                src={course.thumbnailUrl || "/placeholder.jpg"}
+                alt={course.title[lang]}
+                fill
+                className="object-cover"
+              />
+            </div>
 
-              <div className="p-5">
-                <h3 className="text-xl font-semibold text-gray-900">{p.course?.title[lang]}</h3>
+            <div className="p-4 space-y-2">
+              <h3 className="font-semibold">{course.title[lang]}</h3>
+              <p className="text-sm text-gray-600 line-clamp-2">{course.description[lang]}</p>
 
-                <p className="text-gray-600 mt-2 line-clamp-3">{p.course?.description[lang]}</p>
-              </div>
-              <div className="p-5">PROGRESS: {p.progress} %</div>
-            </Link>
-          </div>
-        ))}
-      </div>
+              <div className="text-sm text-gray-500">Прогресс: {p.progress}%</div>
+            </div>
+          </Link>
+        );
+      })}
     </div>
   );
 }
