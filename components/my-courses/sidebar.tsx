@@ -2,6 +2,7 @@
 
 import { VideoDTO } from "@/types/video.dto";
 import CourseVideoItem from "./video-item";
+import { Language } from "@/lib/translations/language";
 
 export default function CourseSidebar({
   courseSlug,
@@ -14,7 +15,7 @@ export default function CourseSidebar({
   videos: VideoDTO[];
   activeVideoSlug: string;
   completedLessons: string[];
-  lang: "ru" | "uk";
+  lang: Language;
 }) {
   return (
     <aside className="w-[380px] border-l  overflow-y-auto">
