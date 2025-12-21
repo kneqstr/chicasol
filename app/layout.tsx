@@ -6,6 +6,7 @@ import { getLanguage } from "@/lib/translations/language";
 import { Toaster } from "@/components/ui/sonner";
 import { getPageContent } from "@/lib/translations/content";
 import { Footer } from "@/components/layout/footer";
+import { Providers } from "./providers";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -23,26 +24,28 @@ export default async function RootLayout({
   return (
     <html lang={lang} suppressHydrationWarning>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <div className="min-h-screen flex flex-col">
-            <NavbarWrapper />
-            <main className="flex-1">{children}</main>
-            <Footer content={content.footer} />
-            <Toaster
-              position="top-center"
-              closeButton={false}
-              toastOptions={{
-                duration: 1500,
-                className: "text-red-600 font-medium text-sm",
-              }}
-            />
-          </div>
-        </ThemeProvider>
+        <Providers>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <div className="min-h-screen flex flex-col">
+              <NavbarWrapper />
+              <main className="flex-1">{children}</main>
+              <Footer content={content.footer} />
+              <Toaster
+                position="top-center"
+                closeButton={false}
+                toastOptions={{
+                  duration: 1500,
+                  className: "text-red-600 font-medium text-sm",
+                }}
+              />
+            </div>
+          </ThemeProvider>
+        </Providers>
       </body>
     </html>
   );

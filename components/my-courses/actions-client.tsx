@@ -1,4 +1,3 @@
-// components/my-courses/actions-client.tsx
 "use client";
 
 import { useState } from "react";
