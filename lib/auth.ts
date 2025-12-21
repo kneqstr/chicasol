@@ -88,6 +88,15 @@ export async function getSession() {
   }
 }
 
+export async function getUser() {
+  const cookieStore = await cookies();
+  const accessToken = cookieStore.get("access_token")?.value;
+
+  if (!accessToken) return null;
+  const { sub } = await verifyAccessToken(accessToken);
+  return sub;
+}
+
 export async function clearAuthCookies() {
   const cookieStore = await cookies();
   cookieStore.delete("access_token");

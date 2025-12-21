@@ -47,7 +47,7 @@ export function PaymentButton({ courseId, coursePrice, className = "" }: Payment
     }
   };
   return (
-    <div className="flex flex-col gap-3">
+    <div className="flex flex-col gap-3 mx-auto">
       <button
         onClick={handlePayment}
         disabled={isLoading}

@@ -4,8 +4,6 @@ import { Language } from "@/lib/translations/language";
 import { ICourse } from "@/models/course.model";
 import Image from "next/image";
 import Link from "next/link";
-import { PaymentButton } from "../payment-button";
-
 interface CourseCardProps {
   course: ICourse;
   lang: Language;
@@ -30,13 +28,6 @@ export default function CourseCard({ course, lang }: CourseCardProps) {
           <p className="text-gray-600 mt-2 line-clamp-3">{course.description[lang]}</p>
         </div>
       </Link>
-      <div className="p-5">
-        <PaymentButton
-          courseId={course._id.toString()}
-          coursePrice={course.price}
-          className="w-full py-4 text-lg"
-        />
-      </div>
     </div>
   );
 }
