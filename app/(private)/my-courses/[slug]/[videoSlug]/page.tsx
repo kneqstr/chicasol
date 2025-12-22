@@ -36,11 +36,23 @@ export default async function CourseVideoPage({
 
   if (!userCourse) redirect("/access-denied");
 
-  const videos: IVideo[] = await Video.find({ courseId: course._id }).sort({ order: 1 }).lean();
+  const videos = await Video.find({ courseId: course._id }).sort({ order: 1 }).lean<IVideo[]>();
 
   const activeVideo = videos.find((v) => v.slug === videoSlug) ?? videos[0];
 
   if (!activeVideo) redirect(`/my-courses/${slug}/${videos[0].slug}`);
+
+  const activeVideoDTO = {
+    id: activeVideo._id.toString(),
+    slug: activeVideo.slug,
+    videoId: activeVideo.videoId,
+    title: activeVideo.title,
+    description: activeVideo.description,
+    subdescription: activeVideo.subdescription,
+    durationMinutes: activeVideo.durationMinutes,
+    likes: activeVideo.likes,
+    views: activeVideo.views,
+  };
 
   const videosDTO = videos.map((v) => ({
     id: v._id.toString(),
@@ -61,17 +73,15 @@ export default async function CourseVideoPage({
           activeVideoSlug={activeVideo.slug}
           completedLessons={userCourse.completedLessons}
           lang={lang}
-          userId={userId}
         />
         <div className="lg:w-2/3 xl:w-3/4">
           <div className="p-4 lg:p-6">
             <CoursePlayer
-              video={activeVideo}
+              video={activeVideoDTO}
               lang={lang}
-              userId={userId}
               courseSlug={slug}
               nextVideoSlug={getNextVideoSlug(videos, activeVideo.slug)}
-              completedLessons={userCourse.completedLessons}
+              previousVideoSlug={getPreviousVideoSlug(videos, activeVideo.slug)}
             />
           </div>
         </div>
@@ -83,7 +93,6 @@ export default async function CourseVideoPage({
             activeVideoSlug={activeVideo.slug}
             completedLessons={userCourse.completedLessons}
             lang={lang}
-            userId={userId}
           />
         </div>
       </div>
@@ -95,6 +104,14 @@ function getNextVideoSlug(videos: IVideo[], currentSlug: string): string | null 
   const currentIndex = videos.findIndex((v) => v.slug === currentSlug);
   if (currentIndex >= 0 && currentIndex + 1 < videos.length) {
     return videos[currentIndex + 1].slug;
+  }
+  return null;
+}
+
+function getPreviousVideoSlug(videos: IVideo[], currentSlug: string): string | null {
+  const currentIndex = videos.findIndex((v) => v.slug === currentSlug);
+  if (currentIndex > 0) {
+    return videos[currentIndex - 1].slug;
   }
   return null;
 }

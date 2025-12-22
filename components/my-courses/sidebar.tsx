@@ -11,7 +11,6 @@ interface CourseSidebarProps {
   activeVideoSlug: string;
   completedLessons: string[];
   lang: Language;
-  userId?: string;
 }
 
 export default function CourseSidebar({
@@ -20,7 +19,6 @@ export default function CourseSidebar({
   activeVideoSlug,
   completedLessons,
   lang,
-  userId,
 }: CourseSidebarProps) {
   const progress = getProgress(videos, completedLessons);
 
@@ -50,7 +48,6 @@ export default function CourseSidebar({
                   isCompleted={isCompleted}
                   videoSlug={video.slug}
                   courseSlug={courseSlug}
-                  userId={userId}
                 />
               </div>
             );
