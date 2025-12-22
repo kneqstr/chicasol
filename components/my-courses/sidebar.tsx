@@ -3,7 +3,7 @@
 import { VideoDTO } from "@/types/video.dto";
 import CourseVideoItem from "./video-item";
 import { Language } from "@/lib/translations/language";
-import { getProgress } from "@/utils/progress";
+import ProgressBar from "./progress";
 
 interface CourseSidebarProps {
   courseSlug: string;
@@ -20,8 +20,6 @@ export default function CourseSidebar({
   completedLessons,
   lang,
 }: CourseSidebarProps) {
-  const progress = getProgress(videos, completedLessons);
-
   return (
     <aside className="hidden lg:block h-[calc(100vh-5rem)] sticky top-20  bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
       <div className="p-4 border-b">
@@ -56,18 +54,7 @@ export default function CourseSidebar({
       </div>
 
       <div className="absolute bottom-0 left-0 right-0 p-4 bg-background/95 backdrop-blur supports-backdrop-filter:bg-background/60">
-        <div className="text-center">
-          <div className="text-sm text-gray-600 mb-1">Прогресс курса</div>
-          <div className="w-full bg-gray-200 rounded-full h-2 mb-2">
-            <div
-              className="bg-green-600 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <div className="text-sm font-medium">
-            {completedLessons.length} из {videos.length} уроков завершено
-          </div>
-        </div>
+        <ProgressBar courseSlug={courseSlug} />
       </div>
     </aside>
   );

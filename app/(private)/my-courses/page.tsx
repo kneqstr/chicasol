@@ -5,7 +5,7 @@ import Course, { ICourse } from "@/models/course.model";
 import UserCourse from "@/models/usercourse.model";
 import Link from "next/link";
 import Image from "next/image";
-import { Progress } from "@/components/ui/progress";
+import ProgressBar from "@/components/my-courses/progress";
 
 export default async function MyCoursesPage() {
   await connectDB();
@@ -45,8 +45,6 @@ export default async function MyCoursesPage() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {purchases.map((p) => {
             const course = p.course as ICourse;
-            const progress = Math.min(Math.max(p.progress || 0, 0), 100);
-
             return (
               <Link
                 key={p._id.toString()}
@@ -75,11 +73,7 @@ export default async function MyCoursesPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-700 font-medium">Прогресс</span>
-                      <span className="text-blue-600 font-semibold">{progress}%</span>
-                    </div>
-                    <Progress value={progress} className="h-2" />
+                    <ProgressBar courseSlug={course.name} />
                   </div>
 
                   <div className="pt-2">
