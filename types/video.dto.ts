@@ -9,3 +9,14 @@ export type VideoDTO = {
   durationMinutes: number;
   order: number;
 };
+export type activeVideoDTO = {
+  id: string;
+  slug: string;
+  videoId: string;
+  title: MultilangText;
+  description: MultilangText;
+  subdescription: MultilangText;
+  durationMinutes: number;
+  likes: number;
+  views: number;
+};

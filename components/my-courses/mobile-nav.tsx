@@ -15,7 +15,6 @@ interface MobileCourseNavProps {
   activeVideoSlug: string;
   completedLessons: string[];
   lang: Language;
-  userId?: string;
 }
 
 export default function MobileCourseNav({
@@ -24,7 +23,6 @@ export default function MobileCourseNav({
   activeVideoSlug,
   completedLessons,
   lang,
-  userId,
 }: MobileCourseNavProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -84,7 +82,6 @@ export default function MobileCourseNav({
                   isCompleted={completedLessons.includes(video.slug)}
                   videoSlug={video.slug}
                   courseSlug={courseSlug}
-                  userId={userId}
                 />
               </div>
             ))}

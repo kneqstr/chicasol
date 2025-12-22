@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { markVideoAsCompleted } from "@/services/course-actions";
 import { CheckCircle, Circle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useCourseProgress } from "@/hooks/use-course-progress";
+import { useToggleLesson } from "@/hooks/use-toggle-lesson-mutation";
 
 interface CourseVideoItemProps {
   href: string;
@@ -14,7 +14,6 @@ interface CourseVideoItemProps {
   isCompleted: boolean;
   videoSlug: string;
   courseSlug: string;
-  userId?: string;
 }
 
 export default function CourseVideoItem({
@@ -22,29 +21,13 @@ export default function CourseVideoItem({
   title,
   duration,
   isActive,
-  isCompleted,
   videoSlug,
   courseSlug,
-  userId,
 }: CourseVideoItemProps) {
-  const [completed, setCompleted] = useState(isCompleted);
-  const [loading, setLoading] = useState(false);
+  const { data, isPending } = useCourseProgress(courseSlug);
+  const toggle = useToggleLesson(courseSlug);
 
-  const handleMarkCompleted = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (!loading && userId) {
-      const newCompleted = !completed;
-      setLoading(true);
-      try {
-        await markVideoAsCompleted(userId, courseSlug, videoSlug, newCompleted);
-        setCompleted(newCompleted);
-      } catch (error) {
-        console.error("Failed to update video completion:", error);
-      } finally {
-        setLoading(false);
-      }
-    }
-  };
+  const completed = data?.completedLessons.includes(videoSlug);
 
   return (
     <Link
@@ -59,8 +42,14 @@ export default function CourseVideoItem({
     >
       <div className="shrink-0">
         <button
-          onClick={handleMarkCompleted}
-          disabled={loading}
+          onClick={(e) => {
+            e.preventDefault();
+            toggle.mutate({
+              videoSlug,
+              completed: !completed,
+            });
+          }}
+          disabled={isPending}
           className="p-1 rounded-full text-muted-foreground transition-colors cursor-pointer hover:text-primary "
         >
           {completed ? <CheckCircle className="w-5 h-5" /> : <Circle className="w-5 h-5" />}

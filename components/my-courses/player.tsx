@@ -2,27 +2,23 @@ import ProtectedVideo from "../protected-component";
 import VideoMeta from "./meta";
 import { Language } from "@/lib/translations/language";
 import CourseActions from "./actions-client";
-import { IVideo } from "@/models/video.model";
+import { activeVideoDTO } from "@/types/video.dto";
 
 interface CoursePlayerProps {
-  video: IVideo;
+  video: activeVideoDTO;
   lang: Language;
-  userId: string;
   courseSlug: string;
   nextVideoSlug?: string | null;
-  completedLessons: string[];
+  previousVideoSlug?: string | null;
 }
 
 export default function CoursePlayer({
   video,
   lang,
-  userId,
   courseSlug,
   nextVideoSlug,
-  completedLessons,
+  previousVideoSlug,
 }: CoursePlayerProps) {
-  const isCompleted = completedLessons.includes(video.slug);
-
   return (
     <div className="space-y-6">
       <div className="relative rounded-xl overflow-hidden shadow-lg bg-black">
@@ -32,16 +28,15 @@ export default function CoursePlayer({
       </div>
 
       <div className="flex-1 lg:max-w-2xl">
-        <VideoMeta video={video} lang={lang} />
+        <VideoMeta video={video} lang={lang} courseSlug={courseSlug} />
       </div>
 
       <div className="lg:hidden">
         <CourseActions
-          userId={userId}
           courseSlug={courseSlug}
           videoSlug={video.slug}
           nextVideoSlug={nextVideoSlug}
-          defaultCompleted={isCompleted}
+          previousVideoSlug={previousVideoSlug}
         />
       </div>
     </div>
