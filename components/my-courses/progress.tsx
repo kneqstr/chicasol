@@ -1,16 +1,31 @@
 "use client";
 
 import { useCourseProgress } from "@/hooks/use-course-progress";
-import { Progress } from "../ui/progress";
+import { Progress } from "@/components/ui/progress";
+import { Skeleton } from "@/components/ui/skeleton";
 
-interface ProgressProps {
+interface ProgressBarProps {
   courseSlug: string;
 }
 
-export default function ProgressBar({ courseSlug }: ProgressProps) {
+export default function ProgressBar({ courseSlug }: ProgressBarProps) {
   const { data, isPending } = useCourseProgress(courseSlug);
 
-  if (isPending || !data) return null;
+  if (isPending) {
+    return (
+      <div className="space-y-2">
+        <div className="flex">
+          <Skeleton className="h-4 w-16" />
+          <Skeleton className="h-4 w-4" />
+          <Skeleton className="h-4 w-6" />
+          <Skeleton className="h-4 w-4" />
+        </div>
+        <Skeleton className="h-1 w-full" />
+      </div>
+    );
+  }
+
+  if (!data) return null;
 
   const completed = data.completedLessons.length;
   const total = data.totalLessons;
@@ -23,6 +38,7 @@ export default function ProgressBar({ courseSlug }: ProgressProps) {
         <span>
           Пройдено {completed} из {total}
         </span>
+        <span>{percentage}%</span>
       </div>
 
       <Progress value={percentage} className="h-1" />
