@@ -3,6 +3,7 @@ import { connectDB } from "@/lib/db";
 import { verifyAccessToken } from "@/lib/auth";
 import Course from "@/models/course.model";
 import UserCourse from "@/models/usercourse.model";
+import Video from "@/models/video.model";
 import { cookies } from "next/headers";
 
 export async function GET(req: Request, context: { params: Promise<{ courseSlug: string }> }) {
@@ -23,6 +24,8 @@ export async function GET(req: Request, context: { params: Promise<{ courseSlug:
     return NextResponse.json({ error: "Course not found" }, { status: 404 });
   }
 
+  const videos = await Video.find({ courseId: course._id });
+
   const userCourse = await UserCourse.findOne({
     user: userId,
     course: course._id,
@@ -31,6 +34,7 @@ export async function GET(req: Request, context: { params: Promise<{ courseSlug:
 
   return NextResponse.json({
     completedLessons: userCourse?.completedLessons ?? [],
+    totalLessons: videos.length,
   });
 }
 

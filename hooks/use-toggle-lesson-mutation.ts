@@ -2,6 +2,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface CourseProgress {
   completedLessons: string[];
+  totalLessons: number;
 }
 
 interface ToggleLessonVars {
@@ -30,9 +31,10 @@ export function useToggleLesson(courseSlug: string) {
       const prev = qc.getQueryData<CourseProgress>(["course-progress", courseSlug]);
 
       qc.setQueryData<CourseProgress>(["course-progress", courseSlug], (old) => {
-        if (!old) return { completedLessons: [] };
+        if (!old) return old;
 
         return {
+          ...old,
           completedLessons: completed
             ? [...old.completedLessons, videoSlug]
             : old.completedLessons.filter((v) => v !== videoSlug),
