@@ -1,18 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { connectDB } from "@/lib/db";
 import { verifyAccessToken } from "@/lib/auth";
 import Course from "@/models/course.model";
 import UserCourse from "@/models/usercourse.model";
 import Video from "@/models/video.model";
-import { cookies } from "next/headers";
 
-export async function GET(req: Request, context: { params: Promise<{ courseSlug: string }> }) {
+export async function GET(req: NextRequest, context: { params: Promise<{ courseSlug: string }> }) {
   const { courseSlug } = await context.params;
   await connectDB();
 
-  const cookieStore = await cookies();
+  const token = req.cookies.get("access_token")?.value;
 
-  const token = cookieStore.get("access_token")?.value;
   if (!token) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -38,11 +36,14 @@ export async function GET(req: Request, context: { params: Promise<{ courseSlug:
   });
 }
 
-export async function PATCH(req: Request, context: { params: Promise<{ courseSlug: string }> }) {
+export async function PATCH(
+  req: NextRequest,
+  context: { params: Promise<{ courseSlug: string }> },
+) {
   const { courseSlug } = await context.params;
   await connectDB();
-  const cookieStore = await cookies();
-  const token = cookieStore.get("access_token")?.value;
+  const token = req.cookies.get("access_token")?.value;
+
   if (!token) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
