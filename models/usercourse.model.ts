@@ -7,6 +7,8 @@ export interface IUserCourse extends Document {
   purchasedAt: Date;
   progress: number;
   completedLessons: string[];
+  likedVideos: string[];
+  viewedVideos: string[];
   isCompleted: boolean;
   isActive: boolean;
 }
@@ -19,6 +21,8 @@ const UserCourseSchema = new Schema<IUserCourse>(
     purchasedAt: { type: Date, default: Date.now },
     progress: { type: Number, default: 0 },
     completedLessons: { type: [String], default: [] },
+    likedVideos: { type: [String], default: [] },
+    viewedVideos: { type: [String], default: [] },
     isCompleted: { type: Boolean, default: false },
     isActive: { type: Boolean, default: true },
   },

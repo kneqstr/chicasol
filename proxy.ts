@@ -14,7 +14,7 @@ const publicPaths = [
   "/payment/return",
 ];
 const authPaths = ["/login", "/register", "/verify", "/complete-register"];
-const oauthPaths = ["/api/oauth", "/api/oauth/callback", "/api/send"];
+const oauthPaths = ["/api/oauth", "/api/oauth/callback"];
 
 const publicApi = ["/api/wayforpay/callback"];
 
@@ -38,7 +38,6 @@ export async function proxy(request: NextRequest) {
   if (isPublicApi) {
     return NextResponse.next();
   }
-
   if (isAdminPath) {
     if (!accessToken) {
       return NextResponse.redirect(new URL("/login", request.url));
@@ -69,7 +68,6 @@ export async function proxy(request: NextRequest) {
   if (isPublicPath && !isAuthPath) {
     return NextResponse.next();
   }
-
   if (!isPublicPath) {
     let isValidToken: boolean = false;
     let newAccessToken: string | undefined = undefined;
@@ -121,7 +119,6 @@ export async function proxy(request: NextRequest) {
       return NextResponse.redirect(loginUrl);
     }
   }
-
   return NextResponse.next();
 }
 

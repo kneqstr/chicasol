@@ -6,6 +6,8 @@ import { Language } from "@/lib/translations/language";
 import { activeVideoDTO } from "@/types/video.dto";
 import { CheckCircle, Circle, Eye, Heart, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useUpdateVideoInteraction, useVideoInteractions } from "@/hooks/use-video-interactions";
+import { useEffect } from "react";
 
 interface VideoMetaProps {
   video: activeVideoDTO;
@@ -14,14 +16,49 @@ interface VideoMetaProps {
 }
 
 export default function VideoMeta({ video, lang, courseSlug }: VideoMetaProps) {
-  const { data, isPending } = useCourseProgress(courseSlug);
+  const { data: progressData, isPending: isProgressPending } = useCourseProgress(courseSlug);
+  const { data: interactionsData } = useVideoInteractions(courseSlug, video.slug);
+  const updateInteraction = useUpdateVideoInteraction(courseSlug, video.slug);
   const toggle = useToggleLesson(courseSlug);
-  const completed = data?.completedLessons.includes(video.slug);
+  const completed = progressData?.completedLessons.includes(video.slug);
+
+  const likes = interactionsData?.video.likes ?? video.likes;
+  const views = interactionsData?.video.views ?? video.views;
+  const hasLiked = interactionsData?.userInteractions.hasLiked ?? false;
+  const hasViewed = interactionsData?.userInteractions.hasViewed ?? false;
 
   const handleToggle = (e: React.MouseEvent) => {
     e.preventDefault();
     toggle.mutate({ videoSlug: video.slug, completed: !completed });
   };
+
+  const handleLike = (e: React.MouseEvent) => {
+    e.preventDefault();
+    updateInteraction.mutate({ action: "like" });
+  };
+
+  const handleTrackView = (watchedTime: number, duration: number) => {
+    updateInteraction.mutate({
+      action: "view",
+      watchedTime,
+      duration,
+    });
+  };
+
+  useEffect(() => {
+    if (hasViewed) return;
+
+    const durationSeconds = video.durationMinutes * 60;
+    const thresholdSeconds = durationSeconds * 0.7;
+
+    const timeoutId = setTimeout(() => {
+      handleTrackView(thresholdSeconds, durationSeconds);
+    }, thresholdSeconds * 1000);
+
+    return () => {
+      if (timeoutId) clearTimeout(timeoutId);
+    };
+  }, [video.slug, hasViewed]);
 
   return (
     <div className="space-y-3 lg:space-y-4">
@@ -38,14 +75,24 @@ export default function VideoMeta({ video, lang, courseSlug }: VideoMetaProps) {
           icon={<Clock className="w-5 h-5 text-muted-foreground" />}
           label={`${video.durationMinutes} мин`}
         />
+
+        <StatItem icon={<Eye className="w-5 h-5 text-muted-foreground" />} label={`${views}`} />
+
         <StatItem
-          icon={<Eye className="w-5 h-5 text-muted-foreground" />}
-          label={`${video.views}`}
+          icon={
+            <Heart
+              className={cn(
+                "w-5 h-5",
+                hasLiked ? "text-muted-foreground fill-muted-foreground" : "text-muted-foreground",
+              )}
+            />
+          }
+          label={`${likes}`}
+          clickable={true}
+          disabled={updateInteraction.isPending}
+          onClick={handleLike}
         />
-        <StatItem
-          icon={<Heart className="w-5 h-5 text-muted-foreground" />}
-          label={`${video.likes}`}
-        />
+
         <StatItem
           icon={
             completed ? (
@@ -54,9 +101,9 @@ export default function VideoMeta({ video, lang, courseSlug }: VideoMetaProps) {
               <Circle className="w-5 h-5 text-muted-foreground" />
             )
           }
-          label={completed ? "Просмотрено" : "Просмотрено"}
-          clickable
-          disabled={isPending}
+          label={completed ? "Просмотрено" : "Отметить как просмотренное"}
+          clickable={true}
+          disabled={isProgressPending}
           onClick={handleToggle}
         />
       </div>
@@ -77,10 +124,10 @@ const StatItem = ({ icon, label, clickable, onClick, disabled }: StatItemProps) 
     onClick={clickable && !disabled ? onClick : undefined}
     className={cn(
       "inline-flex items-center gap-1 text-sm lg:text-base",
-      "px-3 py-1.5 rounded-full border",
+      "px-3 py-1.5 rounded-full border ",
       "bg-muted/50 border-border font-medium text-foreground",
       clickable && !disabled ? "cursor-pointer hover:bg-muted/70 transition" : "",
-      disabled ? "opacity-60 cursor-not-allowed" : "",
+      disabled ? "opacity-60 cursor-pointer" : "",
     )}
   >
     {icon}
