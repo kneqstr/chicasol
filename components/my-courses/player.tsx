@@ -1,4 +1,4 @@
-import ProtectedVideo from "../protected-component";
+import ProtectedVideo from "./protected-component";
 import VideoMeta from "./meta";
 import { Language } from "@/lib/translations/language";
 import CourseActions from "./actions-client";
