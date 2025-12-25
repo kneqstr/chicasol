@@ -1,187 +1,225 @@
 "use client";
 
 import Link from "next/link";
-import { Button } from "../ui/button";
 import { usePathname, useRouter } from "next/navigation";
-import { cn } from "@/lib/utils";
-import { ModeToggle } from "../mode-toggle";
-import { logoutAction } from "@/services/auth.actions";
-import { Sheet, SheetContent, SheetDescription, SheetTitle, SheetTrigger } from "../ui/sheet";
 import { useState } from "react";
-import { Menu } from "lucide-react";
-import { LanguageSwitcher } from "../language-switch";
+import { Menu, LogOut } from "lucide-react";
+
+import { cn } from "@/lib/utils";
+import { logoutAction } from "@/services/auth.actions";
+import { Language } from "@/lib/translations/language";
+
+import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+  SheetDescription,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
+  Menubar,
+  MenubarMenu,
+  MenubarTrigger,
+  MenubarContent,
+  MenubarItem,
+} from "@/components/ui/menubar";
+
+import { PreferencesMenubar } from "../toggle";
 
 interface INavbar {
   session: { isAuth: boolean; isAdmin: boolean };
-  lang: "uk" | "ru";
+  lang: Language;
 }
+
 interface INavItem {
   href: string;
   lable: string;
 }
 
 const publicNavItems: INavItem[] = [
-  { href: "/", lable: "На гловну" },
+  { href: "/", lable: "На головну" },
   { href: "/about", lable: "Про мене" },
-  { href: "/resources", lable: "Матерiали" },
+  { href: "/resources", lable: "Матеріали" },
   { href: "/blog", lable: "Блог" },
   { href: "/courses", lable: "Курси" },
 ];
+
 const privateNavItems: INavItem[] = [{ href: "/my-courses", lable: "Мої курси" }];
 
 export const Navbar = ({ session, lang }: INavbar) => {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const pathname = usePathname();
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+
   async function handleLogout() {
     await logoutAction();
     router.push("/login");
+    setOpen(false);
   }
+
   return (
-    <nav className="fixed z-50 w-full border-b bg-background/95 backdrop-blur supports-\[backdrop-filter]:bg-background/60">
-      <div className="container mx-auto px-4">
+    <nav className="fixed z-50 w-full border-b bg-background/95 backdrop-blur">
+      <div className="mx-auto max-w-7xl px-4">
         <div className="flex h-16 items-center justify-between">
-          <Link href="/" className="flex items-center font-bold text-xl">
+          <Link href="/" className="text-xl font-bold">
             Yoga With Chicasol
           </Link>
-          <div className="hidden md:flex items-center space-x-6">
-            <div className="flex items-center space-x-1">
-              {publicNavItems.map((item) => (
-                <Button
-                  key={item.href}
-                  asChild
-                  variant={pathname === item.href ? "secondary" : "ghost"}
-                  className={cn(
-                    "whitespace-nowrap",
-                    pathname === item.href && "bg-accent text-accent-foreground",
-                  )}
+
+          <div className="hidden md:flex items-center gap-4">
+            <Menubar className="border-none bg-transparent">
+              <MenubarMenu>
+                <MenubarTrigger className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent">
+                  Меню
+                </MenubarTrigger>
+                <MenubarContent>
+                  {publicNavItems.map((item) => (
+                    <MenubarItem
+                      className={`cursor-pointer my-1 ${pathname === item.href ? "bg-accent" : ""}`}
+                      key={item.href}
+                      asChild
+                    >
+                      <Link href={item.href}>{item.lable}</Link>
+                    </MenubarItem>
+                  ))}
+                </MenubarContent>
+              </MenubarMenu>
+
+              {session.isAuth && (
+                <Link
+                  href="/my-courses"
+                  className={`px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent cursor-pointer my-1 ${pathname === "/my-courses" ? "bg-accent" : ""}`}
                 >
-                  <Link href={item.href}>{item.lable}</Link>
-                </Button>
-              ))}
-              {session.isAuth &&
-                privateNavItems.map((item) => (
-                  <Button
-                    key={item.href}
-                    asChild
-                    variant={pathname === item.href ? "secondary" : "ghost"}
-                    className={cn(
-                      "whitespace-nowrap",
-                      pathname === item.href && "bg-accent text-accent-foreground",
-                    )}
-                  >
-                    <Link href={item.href}>{item.lable}</Link>
-                  </Button>
-                ))}
+                  Мої курси
+                </Link>
+              )}
+              {session.isAuth && (
+                <MenubarMenu>
+                  <MenubarTrigger className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent">
+                    Кабінет
+                  </MenubarTrigger>
+                  <MenubarContent>
+                    {privateNavItems.map((item) => (
+                      <MenubarItem key={item.href} asChild>
+                        <Link href={item.href}>{item.lable}</Link>
+                      </MenubarItem>
+                    ))}
+                  </MenubarContent>
+                </MenubarMenu>
+              )}
+
               {session.isAdmin && (
-                <Button
-                  asChild
-                  variant={pathname === "/admin" ? "secondary" : "ghost"}
-                  className={cn(
-                    "whitespace-nowrap",
-                    pathname === "/admin" && "bg-accent text-accent-foreground",
-                  )}
-                >
-                  <Link href="/admin">Admin</Link>
-                </Button>
+                <MenubarMenu>
+                  <MenubarTrigger className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent">
+                    Admin
+                  </MenubarTrigger>
+                  <MenubarContent>
+                    <MenubarItem asChild>
+                      <Link href="/admin">Dashboard</Link>
+                    </MenubarItem>
+                  </MenubarContent>
+                </MenubarMenu>
               )}
-              <ModeToggle />
-              <LanguageSwitcher lang={lang} />
-            </div>
-            <div className="flex items-center space-x-2">
-              {session.isAuth ? (
-                <Button
-                  variant="outline"
-                  onClick={handleLogout}
-                  className="whitespace-nowrap cursor-pointer"
-                >
-                  Вихід
+            </Menubar>
+
+            <PreferencesMenubar lang={lang} />
+
+            {session.isAuth ? (
+              <Button variant="outline" onClick={handleLogout}>
+                Вихід
+              </Button>
+            ) : (
+              <>
+                <Button asChild variant="ghost">
+                  <Link href="/login">Вхід</Link>
                 </Button>
-              ) : (
-                <>
-                  <Button asChild variant="ghost" className="whitespace-nowrap">
-                    <Link href="/login">Вхід</Link>
-                  </Button>
-                  <Button asChild className="whitespace-nowrap">
-                    <Link href="/register">Реєстрація</Link>
-                  </Button>
-                </>
-              )}
-            </div>
+                <Button asChild>
+                  <Link href="/register">Реєстрація</Link>
+                </Button>
+              </>
+            )}
           </div>
+
           <div className="md:hidden">
-            <Sheet open={isOpen} onOpenChange={setIsOpen}>
-              <SheetTrigger asChild>
-                <Button variant="ghost" size="icon" className="cursor-pointer">
-                  <Menu className="h-5 w-5" />
+            <Sheet open={open} onOpenChange={setOpen}>
+              <SheetTrigger className="cursor-pointer" asChild>
+                <Button size="icon" variant="ghost">
+                  <Menu className="h-5 w-5 " />
                 </Button>
               </SheetTrigger>
 
-              <SheetContent side="right" className="w-[300px] sm:w-[400px]">
-                <SheetTitle></SheetTitle>
-                <SheetDescription></SheetDescription>
-                <div className="flex flex-col space-y-4 mt-8">
-                  {publicNavItems.map((item) => (
-                    <MobileNavItem
-                      key={item.href}
-                      href={item.href}
-                      lable={item.lable}
-                      isActive={pathname === item.href}
-                      onClick={() => setIsOpen(false)}
-                    />
-                  ))}
+              <SheetContent side="right" className="flex flex-col p-0">
+                <SheetHeader className="px-6 py-4 border-b">
+                  <SheetTitle>Menu</SheetTitle>
+                  <SheetDescription>Yoga with Chicasol</SheetDescription>
+                </SheetHeader>
 
-                  {session.isAuth &&
-                    privateNavItems.map((item) => (
+                <div className="flex-1 overflow-auto px-3 py-4 space-y-1">
+                  <NavSection title="Меню">
+                    {publicNavItems.map((item) => (
                       <MobileNavItem
                         key={item.href}
-                        href={item.href}
-                        lable={item.lable}
+                        {...item}
                         isActive={pathname === item.href}
-                        onClick={() => setIsOpen(false)}
+                        onClick={() => setOpen(false)}
                       />
                     ))}
-                  {session.isAdmin && (
-                    <Button
-                      asChild
-                      variant={pathname === "/admin" ? "secondary" : "ghost"}
-                      onClick={() => setIsOpen(false)}
-                      className={cn(
-                        "whitespace-nowrap",
-                        pathname === "/admin" && "bg-accent text-accent-foreground",
-                      )}
-                    >
-                      <Link href="/admin">Admin</Link>
-                    </Button>
+                  </NavSection>
+
+                  {session.isAuth && (
+                    <NavSection title="Кабінет">
+                      {privateNavItems.map((item) => (
+                        <MobileNavItem
+                          key={item.href}
+                          {...item}
+                          isActive={pathname === item.href}
+                          onClick={() => setOpen(false)}
+                        />
+                      ))}
+                    </NavSection>
                   )}
-                  <div className="flex items-center justify-end space-x-2 mx-4">
-                    <ModeToggle />
-                    <LanguageSwitcher lang={lang} />
+
+                  {session.isAdmin && (
+                    <NavSection title="Admin">
+                      <MobileNavItem
+                        href="/admin"
+                        lable="Dashboard"
+                        isActive={pathname === "/admin"}
+                        onClick={() => setOpen(false)}
+                      />
+                    </NavSection>
+                  )}
+
+                  <div className="flex justify-end pt-4">
+                    <PreferencesMenubar lang={lang} />
                   </div>
-                  <div className="border-t pt-4 mt-4 mx-4">
-                    {session.isAuth ? (
-                      <Button
-                        variant="outline"
-                        onClick={handleLogout}
-                        className="w-full justify-start cursor-pointer"
-                      >
-                        Вийти
+                </div>
+
+                <div className="border-t p-4">
+                  {session.isAuth ? (
+                    <Button
+                      variant="outline"
+                      className="w-full justify-start gap-2"
+                      onClick={handleLogout}
+                    >
+                      <LogOut className="h-4 w-4" />
+                      Вийти
+                    </Button>
+                  ) : (
+                    <div className="flex flex-col gap-2">
+                      <Button asChild variant="ghost">
+                        <Link href="/login" onClick={() => setOpen(false)}>
+                          Вхід
+                        </Link>
                       </Button>
-                    ) : (
-                      <div className="flex flex-col space-y-2">
-                        <Button asChild variant="ghost" className="justify-start">
-                          <Link href="/login" onClick={() => setIsOpen(false)}>
-                            Вхід
-                          </Link>
-                        </Button>
-                        <Button asChild className="justify-start">
-                          <Link href="/register" onClick={() => setIsOpen(false)}>
-                            Реєстрація
-                          </Link>
-                        </Button>
-                      </div>
-                    )}
-                  </div>
+                      <Button asChild>
+                        <Link href="/register" onClick={() => setOpen(false)}>
+                          Реєстрація
+                        </Link>
+                      </Button>
+                    </div>
+                  )}
                 </div>
               </SheetContent>
             </Sheet>
@@ -191,6 +229,15 @@ export const Navbar = ({ session, lang }: INavbar) => {
     </nav>
   );
 };
+
+function NavSection({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <div className="space-y-1">
+      <p className="px-3 py-2 text-xs font-semibold text-primary uppercase">{title}</p>
+      {children}
+    </div>
+  );
+}
 
 interface IMobileNavItem {
   href: string;
@@ -203,13 +250,13 @@ function MobileNavItem({ href, lable, isActive, onClick }: IMobileNavItem) {
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={cn(
-        "flex items-center mx-4 py-2 px-4 text-sm font-medium rounded-md transition-colors",
+        "flex items-center rounded-md px-6 py-2 text-sm font-medium transition-colors",
         isActive
           ? "bg-accent text-accent-foreground"
-          : "text-foreground/70 hover:text-foreground hover:bg-accent/50",
+          : "text-muted-foreground hover:bg-accent/50 hover:text-foreground",
       )}
-      onClick={onClick}
     >
       {lable}
     </Link>

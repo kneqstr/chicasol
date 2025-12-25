@@ -1,4 +1,4 @@
-import ProtectedVideo from "@/components/protected-component";
+import ProtectedVideo from "@/components/my-courses/protected-component";
 import { verifyAccessToken } from "@/lib/auth";
 import { connectDB } from "@/lib/db";
 import { getLanguage } from "@/lib/translations/language";
