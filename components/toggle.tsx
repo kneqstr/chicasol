@@ -37,7 +37,6 @@ export function PreferencesMenubar({ lang }: PreferencesMenubarProps) {
         flex items-center gap-1 
       "
     >
-      {/* THEME */}
       <MenubarMenu>
         <MenubarTrigger
           className={cn(
@@ -74,7 +73,6 @@ export function PreferencesMenubar({ lang }: PreferencesMenubarProps) {
         </MenubarContent>
       </MenubarMenu>
 
-      {/* LANGUAGE */}
       <MenubarMenu>
         <MenubarTrigger
           className={cn(

@@ -51,6 +51,7 @@
     "react": "^19.2.1",
     "react-dom": "^19.2.1",
     "react-hook-form": "^7.67.0",
+    "react-icons": "^5.5.0",
     "resend": "^6.5.2",
     "slugify": "^1.6.6",
     "sonner": "^2.0.7",
