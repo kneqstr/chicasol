@@ -12,6 +12,7 @@ const publicPaths = [
   "/blog",
   "/courses",
   "/payment/return",
+  "/policy",
 ];
 const authPaths = ["/login", "/register", "/verify", "/complete-register"];
 const oauthPaths = ["/api/oauth", "/api/oauth/callback"];

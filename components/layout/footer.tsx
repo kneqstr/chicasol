@@ -1,5 +1,5 @@
 "use client";
-
+import { LiaTelegram, LiaInstagram } from "react-icons/lia";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 
@@ -18,7 +18,7 @@ export function Footer({ content }: { content: FooterProps }) {
   const { brand, description, links, socials, copyright } = content;
 
   return (
-    <footer className="border-t bg-muted/30 mt-16">
+    <footer className="border-t bg-muted/30 ">
       <div className="mx-auto max-w-7xl px-4 py-12">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
           <div className="md:col-span-1">
@@ -47,11 +47,15 @@ export function Footer({ content }: { content: FooterProps }) {
 
         {socials && socials.length > 0 && (
           <div className="flex gap-4 mt-10">
-            {socials.map((s, idx) => (
-              <Link key={idx} href={s.href} className="text-2xl hover:text-primary transition">
-                {s.icon}
-              </Link>
-            ))}
+            <Link href="https://t.me/chicasol" className="text-2xl hover:text-primary transition">
+              <LiaTelegram />
+            </Link>
+            <Link
+              href="https://www.instagram.com/yoga_with_chicasol/"
+              className="text-2xl hover:text-primary transition"
+            >
+              <LiaInstagram />
+            </Link>
           </div>
         )}
 
