@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/menubar";
 
 import { PreferencesMenubar } from "../toggle";
+import { Separator } from "@radix-ui/react-menubar";
 
 interface INavbar {
   session: { isAuth: boolean; isAdmin: boolean };
@@ -232,8 +233,8 @@ export const Navbar = ({ session, lang }: INavbar) => {
 
 function NavSection({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <div className="space-y-1">
-      <p className="px-3 py-2 text-xs font-semibold text-primary uppercase">{title}</p>
+    <div className="space-y-1 ">
+      <p className="px-3 py-2 border-b text-xs font-semibold text-primary uppercase">{title}</p>
       {children}
     </div>
   );
