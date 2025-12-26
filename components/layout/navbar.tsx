@@ -71,7 +71,7 @@ export const Navbar = ({ session, lang }: INavbar) => {
           <div className="hidden md:flex items-center gap-4">
             <Menubar className="border-none bg-transparent">
               <MenubarMenu>
-                <MenubarTrigger className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent">
+                <MenubarTrigger className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent cursor-pointer">
                   Меню
                 </MenubarTrigger>
                 <MenubarContent>
@@ -97,12 +97,16 @@ export const Navbar = ({ session, lang }: INavbar) => {
               )}
               {session.isAuth && (
                 <MenubarMenu>
-                  <MenubarTrigger className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent">
+                  <MenubarTrigger className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent  cursor-pointer">
                     Кабінет
                   </MenubarTrigger>
                   <MenubarContent>
                     {privateNavItems.map((item) => (
-                      <MenubarItem key={item.href} asChild>
+                      <MenubarItem
+                        className={`cursor-pointer my-1 ${pathname === item.href ? "bg-accent" : ""}`}
+                        key={item.href}
+                        asChild
+                      >
                         <Link href={item.href}>{item.lable}</Link>
                       </MenubarItem>
                     ))}
@@ -112,11 +116,14 @@ export const Navbar = ({ session, lang }: INavbar) => {
 
               {session.isAdmin && (
                 <MenubarMenu>
-                  <MenubarTrigger className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent">
+                  <MenubarTrigger className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent  cursor-pointer">
                     Admin
                   </MenubarTrigger>
                   <MenubarContent>
-                    <MenubarItem asChild>
+                    <MenubarItem
+                      className={`cursor-pointer my-1 ${pathname === "/admin" ? "bg-accent" : ""}`}
+                      asChild
+                    >
                       <Link href="/admin">Dashboard</Link>
                     </MenubarItem>
                   </MenubarContent>
