@@ -4,11 +4,9 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { Menu, LogOut } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { logoutAction } from "@/services/auth.actions";
 import { Language } from "@/lib/translations/language";
-
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -27,8 +25,6 @@ import {
 } from "@/components/ui/menubar";
 
 import { PreferencesMenubar } from "../toggle";
-import { Separator } from "@radix-ui/react-menubar";
-
 interface INavbar {
   session: { isAuth: boolean; isAdmin: boolean };
   lang: Language;
@@ -69,9 +65,19 @@ export const Navbar = ({ session, lang }: INavbar) => {
           </Link>
 
           <div className="hidden md:flex items-center gap-4">
+            <div className="hidden lg:flex">
+              {publicNavItems.map((item) => (
+                <div
+                  className={`px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent cursor-pointer my-1 mx-0.5 ${pathname === item.href ? "bg-accent" : ""}`}
+                  key={item.href}
+                >
+                  <Link href={item.href}>{item.lable}</Link>
+                </div>
+              ))}
+            </div>
             <Menubar className="border-none bg-transparent">
               <MenubarMenu>
-                <MenubarTrigger className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent cursor-pointer">
+                <MenubarTrigger className="hidden md:flex lg:hidden px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent cursor-pointer">
                   Меню
                 </MenubarTrigger>
                 <MenubarContent>
@@ -90,28 +96,10 @@ export const Navbar = ({ session, lang }: INavbar) => {
               {session.isAuth && (
                 <Link
                   href="/my-courses"
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent cursor-pointer my-1 ${pathname === "/my-courses" ? "bg-accent" : ""}`}
+                  className={`px-3 py-1.5 rounded-md text-sm font-medium hover:bg-chart-4 cursor-pointer my-1 ${pathname === "/my-courses" ? "bg-chart-4" : ""}`}
                 >
                   Мої курси
                 </Link>
-              )}
-              {session.isAuth && (
-                <MenubarMenu>
-                  <MenubarTrigger className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent  cursor-pointer">
-                    Кабінет
-                  </MenubarTrigger>
-                  <MenubarContent>
-                    {privateNavItems.map((item) => (
-                      <MenubarItem
-                        className={`cursor-pointer my-1 ${pathname === item.href ? "bg-accent" : ""}`}
-                        key={item.href}
-                        asChild
-                      >
-                        <Link href={item.href}>{item.lable}</Link>
-                      </MenubarItem>
-                    ))}
-                  </MenubarContent>
-                </MenubarMenu>
               )}
 
               {session.isAdmin && (
@@ -174,19 +162,6 @@ export const Navbar = ({ session, lang }: INavbar) => {
                       />
                     ))}
                   </NavSection>
-
-                  {session.isAuth && (
-                    <NavSection title="Кабінет">
-                      {privateNavItems.map((item) => (
-                        <MobileNavItem
-                          key={item.href}
-                          {...item}
-                          isActive={pathname === item.href}
-                          onClick={() => setOpen(false)}
-                        />
-                      ))}
-                    </NavSection>
-                  )}
 
                   {session.isAdmin && (
                     <NavSection title="Admin">
