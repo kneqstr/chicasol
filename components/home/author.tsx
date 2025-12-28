@@ -51,7 +51,7 @@ export function AuthorSection({ content }: { content: AuthorSectionProps }) {
                 title="Author Intro"
               />
             </AspectRatio>
-            <div className="mt-8 p-8 ">
+            <div className="p-8 md:hidden">
               <Link href={cta.href}>
                 <Button size="lg" className="w-full md:w-auto cursor-pointer">
                   {cta.label}
