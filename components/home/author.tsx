@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { CircleDashed } from "lucide-react";
 
 type AuthorSectionProps = {
   title: string;
@@ -19,21 +19,21 @@ export function AuthorSection({ content }: { content: AuthorSectionProps }) {
     <section className="py-16">
       <div className="mx-auto max-w-5xl px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
-          <div>
+          <div className="p-8 ">
             <h2 className="text-2xl md:text-3xl font-bold mb-6">{title}</h2>
 
             <ul className="space-y-3 text-base leading-relaxed">
               {points.map((p, idx) => (
                 <li key={idx} className="flex items-start gap-2 text-muted-foreground">
-                  <span className="mt-1 text-primary">•</span>
+                  <CircleDashed />
                   <span>{p}</span>
                 </li>
               ))}
             </ul>
 
-            <div className="mt-8">
+            <div className="hidden md:flex mt-8">
               <Link href={cta.href}>
-                <Button size="lg" className="w-full md:w-auto">
+                <Button size="lg" className="w-full md:w-auto cursor-pointer">
                   {cta.label}
                 </Button>
               </Link>
@@ -51,6 +51,13 @@ export function AuthorSection({ content }: { content: AuthorSectionProps }) {
                 title="Author Intro"
               />
             </AspectRatio>
+            <div className="mt-8 p-8 ">
+              <Link href={cta.href}>
+                <Button size="lg" className="w-full md:w-auto cursor-pointer">
+                  {cta.label}
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -1,5 +1,4 @@
 import { AuthorSection } from "@/components/home/author";
-import CourseBenefits from "@/components/home/course-benefits";
 import { CourseModules } from "@/components/home/course-module";
 import { FAQ } from "@/components/home/faq";
 import { FinalCTA } from "@/components/home/final-cta";
@@ -18,7 +17,6 @@ export default async function HomePage() {
   return (
     <div className="pt-20">
       <Hero content={content.hero} />
-      <CourseBenefits content={content.benefits} />
       <AuthorSection content={content.aboutAuthor} />
       <CourseModules content={content.courseModules} />
       <ForWhom content={content.forWhom} />
