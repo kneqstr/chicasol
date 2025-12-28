@@ -2,8 +2,9 @@
 
 import contentModel, { ContentUnion } from "@/models/content.model";
 import { connectDB } from "../db";
+import { Language } from "./language";
 
-export async function getPageContent(page: string, lang: "uk" | "ru") {
+export async function getPageContent(page: string, lang: Language) {
   await connectDB();
   const blocks = await contentModel.find({ page }).lean();
   const normalized = blocks.reduce(
