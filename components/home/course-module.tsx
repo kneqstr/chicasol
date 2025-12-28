@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { Aperture } from "lucide-react";
 
 type CourseModule = {
   title: string;
@@ -32,7 +33,7 @@ export function CourseModules({ content }: { content: CourseModulesProps }) {
             <AccordionItem
               key={index}
               value={`module-${index}`}
-              className="border rounded-xl px-4 last:border-b"
+              className="border rounded-xl px-4 last:border-b bg-card"
             >
               <AccordionTrigger className="text-lg font-medium cursor-pointer">
                 <div className="flex flex-col w-full text-left">
@@ -52,8 +53,8 @@ export function CourseModules({ content }: { content: CourseModulesProps }) {
                 {module.bullets && (
                   <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                     {module.bullets.map((b, i) => (
-                      <li key={i} className="flex items-start gap-2">
-                        <span className="text-primary mt-1">•</span>
+                      <li key={i} className="flex items-center gap-2">
+                        <Aperture className="h-3 w-3" />
                         <span>{b}</span>
                       </li>
                     ))}

@@ -17,8 +17,8 @@ export default async function HomePage() {
   return (
     <div className="pt-20">
       <Hero content={content.hero} />
-      <AuthorSection content={content.aboutAuthor} />
       <CourseModules content={content.courseModules} />
+      <AuthorSection content={content.aboutAuthor} />
       <ForWhom content={content.forWhom} />
       <Testimonials content={content.testimonials} />
       <Pricing content={content.pricing} />
