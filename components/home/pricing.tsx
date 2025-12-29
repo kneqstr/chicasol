@@ -21,7 +21,7 @@ export function Pricing({ content }: { content: PricingContent }) {
   const { title, subtitle, priceLabel, priceValue, buttonLabel, benefitsTitle, benefits } = content;
 
   return (
-    <section className="py-20" id="pricing">
+    <section className="py-20 " id="pricing">
       <div className="max-w-4xl mx-auto px-4 text-center">
         <h2 className="text-3xl font-bold">{title}</h2>
         {subtitle && <p className="text-muted-foreground mt-2 text-sm md:text-base">{subtitle}</p>}
@@ -30,7 +30,7 @@ export function Pricing({ content }: { content: PricingContent }) {
           className="
             mt-10 mx-auto rounded-3xl overflow-hidden 
             flex flex-col md:flex-row 
-            border bg-card/60 backdrop-blur shadow-lg
+            border bg-card/60 backdrop-blur shadow-lg hover:border-primary/30 transition-all duration-300
           "
         >
           <CardContent
@@ -64,7 +64,7 @@ export function Pricing({ content }: { content: PricingContent }) {
             </div>
 
             <Link href="/pay" className="mt-8 w-full ">
-              <Button size="lg" className="w-full text-lg py-6 cursor-pointer">
+              <Button size="lg" className="w-full max-w-100 text-lg py-6 cursor-pointer">
                 {buttonLabel}
               </Button>
             </Link>
