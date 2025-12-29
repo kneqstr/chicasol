@@ -29,9 +29,9 @@ export function FAQ({ content }: { content: FAQProps }) {
             <AccordionItem
               key={index}
               value={`faq-${index}`}
-              className="border rounded-xl px-4 last:border-b"
+              className="border rounded-xl bg-card px-4 last:border-b hover:border-primary/30 transition-all duration-300"
             >
-              <AccordionTrigger className="text-left text-base md:text-lg font-medium">
+              <AccordionTrigger className="text-left text-base md:text-lg font-medium cursor-pointer ">
                 {item.question}
               </AccordionTrigger>
               <AccordionContent className="text-sm md:text-base text-muted-foreground">
