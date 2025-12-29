@@ -60,14 +60,13 @@ export function Testimonials({ content }: { content: TestimonialsProps }) {
               whileInView={{ opacity: 1, y: 0, scale: 1 }}
               viewport={{ once: true, margin: "-50px" }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -8, transition: { duration: 0.2 } }}
             >
               <TestimonialCard item={item} index={index} />
             </motion.div>
           ))}
         </div>
 
-        <div className="hidden md:grid lg:hidden grid-cols-1 sm:grid-cols-2 gap-6">
+        <div className="hidden md:grid lg:hidden grid-cols-1 sm:grid-cols-2 gap-6 ">
           {items.map((item, index) => (
             <motion.div
               key={index}
@@ -87,7 +86,7 @@ export function Testimonials({ content }: { content: TestimonialsProps }) {
               align: "start",
               loop: true,
             }}
-            className="w-full"
+            className="w-full "
           >
             <CarouselContent className="-ml-4">
               {items.map((item, index) => (
@@ -97,6 +96,7 @@ export function Testimonials({ content }: { content: TestimonialsProps }) {
                     whileInView={{ opacity: 1, x: 0 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.3 }}
+                    className="h-full"
                   >
                     <TestimonialCard item={item} index={index} />
                   </motion.div>
@@ -151,7 +151,7 @@ function TestimonialCard({ item, index }: { item: Testimonial; index: number }) 
   return (
     <Card
       className={cn(
-        "h-full yoga-card border-border/50 hover:border-primary/30 transition-all duration-300 group overflow-hidden",
+        "h-full yoga-card border hover:border-primary/30 transition-all duration-300 group overflow-hidden",
         "shadow-sm hover:shadow-lg",
       )}
     >
@@ -187,7 +187,7 @@ function TestimonialCard({ item, index }: { item: Testimonial; index: number }) 
                   />
                 ))}
               </div>
-              <span className="text-sm font-medium ml-1">{item.rating}.0</span>
+              <span className="text-sm font-medium ml-1">{item.rating.toFixed(1)}</span>
             </div>
 
             <div className="flex items-center gap-3 mt-2">
@@ -205,8 +205,6 @@ function TestimonialCard({ item, index }: { item: Testimonial; index: number }) 
           <p className="text-sm text-muted-foreground leading-relaxed">{item.text}</p>
         </div>
       </CardContent>
-
-      <div className="absolute left-0 top-0 bottom-0 w-1 bg-linear-to-b from-transparent via-primary/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
     </Card>
   );
 }

@@ -33,7 +33,7 @@ export function CourseModules({ content }: { content: CourseModulesProps }) {
             <AccordionItem
               key={index}
               value={`module-${index}`}
-              className="border rounded-xl px-4 last:border-b bg-card"
+              className="border rounded-xl px-4 last:border-b bg-card hover:border-primary/30 transition-all duration-300"
             >
               <AccordionTrigger className="text-lg font-medium cursor-pointer">
                 <div className="flex flex-col w-full text-left">
