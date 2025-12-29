@@ -40,7 +40,7 @@ export function CourseModules({ content }: { content: CourseModulesProps }) {
                   <span>{module.title}</span>
 
                   {(module.lessons || module.duration) && (
-                    <span className="text-sm text-muted-foreground mt-1">
+                    <span className="text-sm text-muted-foreground mt-1 ">
                       {module.lessons}
                       {module.lessons && module.duration ? " · " : ""}
                       {module.duration}
@@ -51,7 +51,7 @@ export function CourseModules({ content }: { content: CourseModulesProps }) {
 
               <AccordionContent>
                 {module.bullets && (
-                  <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
+                  <ul className="mt-3 space-y-2  text-sm text-muted-foreground">
                     {module.bullets.map((b, i) => (
                       <li key={i} className="flex items-center gap-2">
                         <Aperture className="h-3 w-3" />

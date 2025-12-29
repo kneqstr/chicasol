@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
         hostname: "**",
       },
     ],
+    domains: ["png.pngtree.com", "randomuser.me", "images.pexels.com"],
   },
 };
 
