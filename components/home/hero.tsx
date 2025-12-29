@@ -37,7 +37,7 @@ export function Hero({ content }: { content: HeroProps }) {
   return (
     <section className={`mx-auto px-4 pb-8 sm:px-6 max-w-7xl `}>
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-        <div className="lg:col-span-6">
+        <div className="lg:col-span-6 bg-linear-to-t rounded-4xl lg:bg-none from-background to-card">
           <AspectRatio ratio={16 / 9} className="overflow-hidden ">
             <Image
               src={image}
