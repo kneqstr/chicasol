@@ -6,10 +6,25 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "**",
+        hostname: "pbs.twimg.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "png.pngtree.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.pexels.com",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "randomuser.me",
+        pathname: "/**",
       },
     ],
-    domains: ["png.pngtree.com", "randomuser.me", "images.pexels.com"],
   },
 };
 
