@@ -1,12 +1,14 @@
 "use client";
 import { useState } from "react";
 import { createPayment } from "@/services/payment.action";
+import { Language } from "@/lib/translations/language";
 interface PaymentButtonProps {
   courseId: string;
   coursePrice: number;
+  lang: Language;
   className?: string;
 }
-export function PaymentButton({ courseId, coursePrice, className = "" }: PaymentButtonProps) {
+export function PaymentButton({ courseId, coursePrice, lang, className = "" }: PaymentButtonProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handlePayment = async () => {
@@ -47,16 +49,16 @@ export function PaymentButton({ courseId, coursePrice, className = "" }: Payment
     }
   };
   return (
-    <div className="flex flex-col gap-3 mx-auto">
+    <div className="flex flex-col gap-3 mx-auto max-w-120">
       <button
         onClick={handlePayment}
         disabled={isLoading}
-        className={`px-6 py-3 cursor-pointer bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${className}`}
+        className={`px-6 py-3  cursor-pointer bg-primary text-primary-foreground hover:bg-primary/90 font-medium rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 ${className}`}
       >
         {isLoading ? (
           <>
             <svg
-              className="animate-spin h-5 w-5 text-white"
+              className="animate-spin h-5 w-5 text-background"
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
@@ -75,14 +77,17 @@ export function PaymentButton({ courseId, coursePrice, className = "" }: Payment
                 d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
               ></path>
             </svg>
-            Обробка...
+            {lang === "uk" ? "Обробка..." : "Обработка..."}
           </>
         ) : (
-          `Купити за ${coursePrice} ₴`
+          `${lang === "uk" ? "Купити" : "Купить"} за ${coursePrice} ₴`
         )}
       </button>
-      <p className="text-xs text-gray-500 text-center">
-        Після натискання кнопки вас буде перенаправлено на сторінку безпечної оплати WayForPay
+      <p className="text-xs text-accent-foreground text-center">
+        {lang === "uk" &&
+          "Після натискання кнопки вас буде перенаправлено на сторінку безпечної оплати WayForPay"}
+        {lang === "ru" &&
+          "После нажатия кнопки вы будете перенаправлены на страницу безопасной оплаты WayForPay"}
       </p>
     </div>
   );
