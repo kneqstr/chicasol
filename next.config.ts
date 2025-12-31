@@ -11,7 +11,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "png.pngtree.com",
+        hostname: "images.squarespace-cdn.com",
         pathname: "/**",
       },
       {
