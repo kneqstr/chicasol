@@ -53,7 +53,7 @@ export function Hero({ content, lang }: { content: HeroProps; lang: Language }) 
           </AspectRatio>
         </div>
 
-        <div className=" lg:col-span-6 bg-primary-foreground p-12  rounded-4xl bg-linear-to-b lg:bg-linear-to-r from-background to-card">
+        <div className=" lg:col-span-6 bg-primary-foreground px-6 py-12 rounded-4xl bg-linear-to-b lg:bg-linear-to-r from-background to-card">
           <div className="w-full">
             <h1 className="text-2xl sm:text-3xl md:text-4xl font-extrabold leading-tight ">
               {title}

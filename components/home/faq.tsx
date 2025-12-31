@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { motion } from "framer-motion";
 
 type FAQItem = {
   question: string;
@@ -21,7 +22,13 @@ export function FAQ({ content }: { content: FAQProps }) {
   const { title, items } = content;
   return (
     <section className="py-16" id="faq">
-      <div className="max-w-3xl mx-auto px-4">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="max-w-3xl mx-auto px-4"
+      >
         {title && <h2 className="text-3xl font-bold text-center mb-10">{title}</h2>}
 
         <Accordion type="single" collapsible className="space-y-4">
@@ -40,7 +47,7 @@ export function FAQ({ content }: { content: FAQProps }) {
             </AccordionItem>
           ))}
         </Accordion>
-      </div>
+      </motion.div>
     </section>
   );
 }

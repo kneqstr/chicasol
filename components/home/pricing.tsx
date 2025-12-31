@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { PaymentButton } from "../payment-button";
 import { Language } from "@/lib/translations/language";
+import { motion } from "framer-motion";
 
 type PricingFeature = string;
 
@@ -24,7 +25,13 @@ export function Pricing({ content, lang }: { content: PricingContent; lang: Lang
 
   return (
     <section className="py-20 " id="pricing">
-      <div className="max-w-4xl mx-auto px-4 text-center">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="max-w-4xl mx-auto px-4 text-center"
+      >
         <h2 className="text-3xl font-bold">{title}</h2>
         {subtitle && <p className="text-muted-foreground mt-2 text-sm md:text-base">{subtitle}</p>}
 
@@ -68,7 +75,7 @@ export function Pricing({ content, lang }: { content: PricingContent; lang: Lang
             <PaymentButton courseId="69472e6c030fbf479cb807cf" coursePrice={1} lang={lang} />
           </CardHeader>
         </Card>
-      </div>
+      </motion.div>
     </section>
   );
 }
