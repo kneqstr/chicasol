@@ -54,7 +54,7 @@ export function CourseModules({ content }: { content: CourseModulesProps }) {
                   <ul className="mt-3 space-y-2  text-sm text-muted-foreground">
                     {module.bullets.map((b, i) => (
                       <li key={i} className="flex items-center gap-2">
-                        <Aperture className="h-3 w-3" />
+                        <Aperture className="h-3 w-3 shrink-0" />
                         <span>{b}</span>
                       </li>
                     ))}
