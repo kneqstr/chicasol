@@ -1,6 +1,7 @@
 "use client";
 
 import { Card, CardContent } from "@/components/ui/card";
+import { motion } from "framer-motion";
 import { CircleCheck } from "lucide-react";
 
 type ForWhomProps = {
@@ -18,14 +19,20 @@ export function ForWhom({ content }: { content: ForWhomProps }) {
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {items.map((item, index) => (
-            <div key={index}>
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: index }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+              key={index}
+            >
               <Card className="rounded-xl border bg-card backdrop-blur-lg shadow-sm hover:shadow-md transition-shadow">
                 <CardContent className="px-6 flex items-center gap-4">
                   <CircleCheck className="text-muted-foreground" />
                   <p className="text-left text-sm md:text-base text-muted-foreground">{item}</p>
                 </CardContent>
               </Card>
-            </div>
+            </motion.div>
           ))}
         </div>
       </div>
