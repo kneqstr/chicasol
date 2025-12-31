@@ -24,8 +24,8 @@ export function AuthorSection({ content }: { content: AuthorSectionProps }) {
 
             <ul className="space-y-3 text-base leading-relaxed">
               {points.map((p, idx) => (
-                <li key={idx} className="flex items-start gap-2 text-muted-foreground">
-                  <CircleDashed />
+                <li key={idx} className="flex items-center gap-2 text-muted-foreground">
+                  <CircleDashed className="shrink-0 w-5 h-5" />
                   <span>{p}</span>
                 </li>
               ))}
