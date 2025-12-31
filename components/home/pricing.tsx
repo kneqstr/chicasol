@@ -4,6 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { PaymentButton } from "../payment-button";
+import { Language } from "@/lib/translations/language";
 
 type PricingFeature = string;
 
@@ -17,7 +19,7 @@ type PricingContent = {
   benefits: PricingFeature[];
 };
 
-export function Pricing({ content }: { content: PricingContent }) {
+export function Pricing({ content, lang }: { content: PricingContent; lang: Language }) {
   const { title, subtitle, priceLabel, priceValue, buttonLabel, benefitsTitle, benefits } = content;
 
   return (
@@ -63,11 +65,7 @@ export function Pricing({ content }: { content: PricingContent }) {
               <div className="text-5xl font-extrabold mt-3 tracking-tight">{priceValue}</div>
             </div>
 
-            <Link href="/pay" className="mt-8 w-full ">
-              <Button size="lg" className="w-full max-w-100 text-lg py-6 cursor-pointer">
-                {buttonLabel}
-              </Button>
-            </Link>
+            <PaymentButton courseId="69472e6c030fbf479cb807cf" coursePrice={1} lang={lang} />
           </CardHeader>
         </Card>
       </div>

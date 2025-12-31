@@ -5,6 +5,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import { Ratio, Star, Users } from "lucide-react";
+import { PaymentButton } from "../payment-button";
+import { Language } from "@/lib/translations/language";
 
 type HeroProps = {
   title: string;
@@ -20,7 +22,7 @@ type HeroProps = {
   features?: { icon: string; text: string }[];
 };
 
-export function Hero({ content }: { content: HeroProps }) {
+export function Hero({ content, lang }: { content: HeroProps; lang: Language }) {
   const {
     title,
     subtitle,
@@ -61,21 +63,23 @@ export function Hero({ content }: { content: HeroProps }) {
               <p className="mt-4 text-sm sm:text-base text-muted-foreground">{subtitle}</p>
             )}
 
-            <div className="mt-6 flex flex-col sm:flex-row gap-3">
-              {primaryCta ? (
-                <Link href={primaryCta.href} className="w-full sm:w-auto ">
-                  <Button className="w-full cursor-pointer" size="lg">
-                    {primaryCta.label}
-                  </Button>
-                </Link>
-              ) : null}
-
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
               {secondaryCta ? (
-                <Link href={secondaryCta.href} className="w-full sm:w-auto cursor-pointer">
-                  <Button variant="outline" className="w-full sm:w-auto cursor-pointer" size="lg">
+                <Link
+                  href={secondaryCta.href}
+                  className="w-full sm:w-auto max-w-120 mx-auto cursor-pointer"
+                >
+                  <Button
+                    variant="outline"
+                    className="w-full cursor-pointer py-6  rounded-lg"
+                    size="lg"
+                  >
                     {secondaryCta.label}
                   </Button>
                 </Link>
+              ) : null}
+              {primaryCta ? (
+                <PaymentButton courseId="69472e6c030fbf479cb807cf" coursePrice={1} lang={lang} />
               ) : null}
             </div>
 

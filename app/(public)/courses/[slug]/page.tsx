@@ -37,6 +37,7 @@ export default async function CourseDetails({ params }: { params: Promise<{ slug
         description={course.description[lang]}
         price={course.price}
         id={course._id.toString()}
+        lang={lang}
       />
 
       <VideosAccordion videos={videos} lang={lang} />

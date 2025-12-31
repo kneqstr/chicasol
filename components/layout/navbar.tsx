@@ -164,6 +164,17 @@ export const Navbar = ({ session, lang }: INavbar) => {
                   </NavSection>
 
                   {session.isAdmin && (
+                    <NavSection title="Навчання">
+                      <MobileNavItem
+                        href="/my-courses"
+                        lable="Мои курсы"
+                        isActive={pathname === "/my-courses"}
+                        onClick={() => setOpen(false)}
+                      />
+                    </NavSection>
+                  )}
+
+                  {session.isAdmin && (
                     <NavSection title="Admin">
                       <MobileNavItem
                         href="/admin"

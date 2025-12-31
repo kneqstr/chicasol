@@ -19,10 +19,10 @@ export default function VideosAccordion({ videos, lang }: VideosAccordionProps) 
   return (
     <div className="mt-20 min-h-screen space-y-4">
       {videos.map((video, index) => (
-        <div key={video._id.toString()} className="border rounded-xl  shadow-sm">
+        <div key={video._id.toString()} className="border rounded-xl  bg-card shadow-sm">
           <button
             onClick={() => toggle(index)}
-            className="w-full flex items-center justify-between px-5 py-4 text-left"
+            className="w-full flex items-center justify-between px-5 cursor-pointer py-4 rounded-xl text-left"
           >
             <span className="font-semibold text-lg">{video.title[lang]}</span>
 
@@ -38,7 +38,7 @@ export default function VideosAccordion({ videos, lang }: VideosAccordionProps) 
               {video.tags.length > 0 && (
                 <div className="flex flex-wrap gap-2 mt-2">
                   {video.tags.map((tag, i) => (
-                    <span key={i} className="bg-gray-100 text-gray-700 text-xs px-2 py-1 rounded">
+                    <span key={i} className=" text-gray-700 text-xs px-2 py-1 rounded">
                       {tag[lang]}
                     </span>
                   ))}
