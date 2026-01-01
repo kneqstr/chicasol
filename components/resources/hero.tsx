@@ -1,8 +1,6 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
 
 type ResourcesHeroProps = {
   title: string;
@@ -16,7 +14,7 @@ type ResourcesHeroProps = {
 };
 
 export function ResourcesHero({ content }: { content: ResourcesHeroProps }) {
-  const { title, subtitle, collage, ctas } = content;
+  const { title, subtitle, collage } = content;
 
   return (
     <section className="relative overflow-hidden py-16">
@@ -35,26 +33,6 @@ export function ResourcesHero({ content }: { content: ResourcesHeroProps }) {
         <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold">{title}</h1>
 
         <p className="mt-4 text-base sm:text-lg text-muted-foreground">{subtitle}</p>
-
-        <div className="mt-8 flex flex-col sm:flex-row justify-center gap-4">
-          <Link href={ctas.videos.href}>
-            <Button size="lg" className="w-full sm:w-auto">
-              {ctas.videos.label}
-            </Button>
-          </Link>
-
-          <Link href={ctas.checklists.href}>
-            <Button variant="outline" size="lg" className="w-full sm:w-auto">
-              {ctas.checklists.label}
-            </Button>
-          </Link>
-
-          <Link href={ctas.meditations.href}>
-            <Button variant="secondary" size="lg" className="w-full sm:w-auto">
-              {ctas.meditations.label}
-            </Button>
-          </Link>
-        </div>
       </div>
     </section>
   );
