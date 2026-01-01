@@ -8,11 +8,9 @@ import { Pricing } from "@/components/home/pricing";
 import { Testimonials } from "@/components/home/testimonials";
 import { getPageContent } from "@/lib/translations/content";
 import { getLanguage } from "@/lib/translations/language";
-import { resolve } from "path";
 
 export default async function HomePage() {
   const lang = await getLanguage();
-  await new Promise((resolve) => setTimeout(resolve, 1000));
 
   const content = await getPageContent("home", lang);
 

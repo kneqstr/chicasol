@@ -78,9 +78,7 @@ export function Hero({ content, lang }: { content: HeroProps; lang: Language }) 
                   </Button>
                 </Link>
               ) : null}
-              {primaryCta ? (
-                <PaymentButton courseId="69472e6c030fbf479cb807cf" coursePrice={1} lang={lang} />
-              ) : null}
+              <PaymentButton courseId="69472e6c030fbf479cb807cf" coursePrice={1} lang={lang} />
             </div>
 
             <div className="mt-6 flex flex-wrap items-center gap-4 text-sm">
