@@ -3,6 +3,7 @@
 import { Card } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { motion } from "framer-motion";
+import SeparatedTitle from "./seporated-title";
 
 type AuthorStoryItem = {
   year: string;
@@ -18,11 +19,11 @@ export function AuthorStory({ content }: { content: AuthorStoryContent }) {
   return (
     <section className="py-20">
       <div className="mx-auto max-w-4xl px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">{content.title}</h2>
+        <SeparatedTitle title={content.title} />
 
-        <Card className="p-8 rounded-2xl shadow-sm">
+        <Card className="p-8 rounded-2xl shadow-sm  hover:border-primary/30 transition-all duration-300">
           <div className="relative">
-            <div className="space-y-10">
+            <div className="space-y-10 ">
               {content.timeline.map((item, index) => (
                 <motion.div
                   key={index}

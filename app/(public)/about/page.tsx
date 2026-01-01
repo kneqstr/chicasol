@@ -17,13 +17,13 @@ export default async function AboutPage() {
   return (
     <div className="pt-20">
       <AuthorHero content={content.author.hero} />
-      <AuthorStats content={content.author.stats} />
-      <SocialProof content={content.author.socials} />
       <AuthorStory content={content.authorStory} />
+      <AuthorStats content={content.author.stats} />
       <TeachingPhilosophy content={content.teachingPhilosophy} />
       <CertificatesGrid content={content.certificates} />
       <PracticeGallery content={content.practiceGallery} />
       <AuthorVideoMessage content={content.videoMessage} />
+      <SocialProof content={content.author.socials} />
     </div>
   );
 }

@@ -21,23 +21,24 @@ export function AuthorVideoMessage({ content }: { content: VideoProps }) {
     <section className="py-20">
       <div className="mx-auto max-w-6xl px-4">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
+          <div>
             <h2 className="text-3xl md:text-4xl font-bold mb-8 leading-tight">{title}</h2>
 
             <div className="space-y-6">
-              {blocks.map((section, idx) => (
-                <div key={idx} className="bg-muted/30 rounded-2xl p-6 shadow-sm">
-                  <h3 className="text-xl font-semibold mb-2">{section.heading}</h3>
+              {blocks.map((section, i) => (
+                <motion.div
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ duration: 0.5, delay: i * 0.2 }}
+                  key={i}
+                  className="bg-card/30 rounded-2xl p-6 shadow-sm"
+                >
+                  <h3 className="text-xl font-semibold text-primary mb-2">{section.heading}</h3>
                   <p className="text-muted-foreground leading-relaxed">{section.text}</p>
-                </div>
+                </motion.div>
               ))}
             </div>
-          </motion.div>
-
+          </div>
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}

@@ -2,9 +2,11 @@
 
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { Separator } from "../ui/separator";
+import SeparatedTitle from "./seporated-title";
 
 type TeachingItem = {
-  icon: string;
+  description: string;
   text: string;
 };
 
@@ -18,7 +20,7 @@ export function TeachingPhilosophy({ content }: { content: TeachingPhilosophyCon
   return (
     <section className="py-20">
       <div className="mx-auto max-w-5xl px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">{title}</h2>
+        <SeparatedTitle title={title} />
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {principles.map((item, index) => (
@@ -29,9 +31,11 @@ export function TeachingPhilosophy({ content }: { content: TeachingPhilosophyCon
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.12 }}
             >
-              <Card className="p-8 rounded-2xl text-center shadow-sm hover:shadow-md transition-shadow">
-                <div className="text-4xl mb-4">{item.icon}</div>
-                <p className="text-base text-muted-foreground">{item.text}</p>
+              <Card className="h-full flex justify-between p-4 rounded-2xl text-center shadow-sm hover:border-primary/30 transition-all duration-300">
+                <p className="text-2xl text-primary">{item.text}</p>
+                <div className="text-base text-left text-muted-foreground mb-2">
+                  {item.description}
+                </div>
               </Card>
             </motion.div>
           ))}
