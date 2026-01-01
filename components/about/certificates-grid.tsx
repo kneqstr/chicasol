@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import SeparatedTitle from "./seporated-title";
 
 type CertificateItem = {
   title: string;
@@ -19,8 +20,7 @@ export function CertificatesGrid({ content }: { content: CertificatesGridContent
   return (
     <section className="py-20">
       <div className="mx-auto max-w-6xl px-4">
-        <h2 className="text-3xl md:text-4xl font-bold text-center mb-12">{title}</h2>
-
+        <SeparatedTitle title={title} />
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {certificates.map((item, index) => (
             <motion.div
@@ -30,12 +30,12 @@ export function CertificatesGrid({ content }: { content: CertificatesGridContent
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: index * 0.12 }}
             >
-              <Card className="overflow-hidden rounded-xl shadow-sm hover:shadow-md transition-shadow">
-                <div className="relative w-full h-40 bg-muted">
+              <Card className="h-full pt-0 overflow-hidden rounded-xl shadow-sm hover:border-primary/30 transition-all duration-300">
+                <div className="relative w-full h-50 bg-muted">
                   <Image src={item.image} alt={item.title} fill className="object-cover" />
                 </div>
 
-                <div className="p-4 text-center">
+                <div className="text-center">
                   <p className="text-sm font-medium">{item.title}</p>
                 </div>
               </Card>

@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import { Card, CardHeader, CardContent } from "@/components/ui/card";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import SeparatedTitle from "./seporated-title";
 
 type GalleryItem = {
   image: string;
@@ -19,7 +20,7 @@ type GalleryItem = {
 
 type PracticeGalleryProps = {
   items: GalleryItem[];
-  sectionTitle?: string;
+  sectionTitle: string;
 };
 
 export function PracticeGallery({ content }: { content: PracticeGalleryProps }) {
@@ -28,15 +29,13 @@ export function PracticeGallery({ content }: { content: PracticeGalleryProps }) 
   return (
     <section className="py-16">
       <div className="mx-auto max-w-5xl px-4">
-        {sectionTitle && (
-          <h2 className="text-2xl md:text-3xl font-bold mb-10 text-center">{sectionTitle}</h2>
-        )}
+        <SeparatedTitle title={sectionTitle} />
 
         <Carousel className="w-full">
-          <CarouselContent>
+          <CarouselContent className="p-0">
             {items.map((item, i) => (
-              <CarouselItem key={i}>
-                <Card className="overflow-hidden rounded-2xl shadow-lg">
+              <CarouselItem key={i} className="bg-muted/1 rounded-2xl">
+                <Card className="overflow-hidden rounded-2xl">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-4 md:p-6 items-center">
                     <div>
                       <AspectRatio ratio={3 / 4} className="bg-muted rounded-xl overflow-hidden">
