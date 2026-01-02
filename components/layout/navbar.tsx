@@ -96,7 +96,7 @@ export const Navbar = ({ session, lang }: INavbar) => {
               {session.isAuth && (
                 <Link
                   href="/my-courses"
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium hover:bg-chart-4 cursor-pointer my-1 ${pathname === "/my-courses" ? "bg-chart-4" : ""}`}
+                  className={`px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent cursor-pointer my-1 ${pathname === "/my-courses" ? "bg-accent" : ""}`}
                 >
                   Мої курси
                 </Link>
@@ -136,7 +136,14 @@ export const Navbar = ({ session, lang }: INavbar) => {
               </>
             )}
           </div>
-
+          {session.isAuth && (
+            <Link
+              href="/my-courses"
+              className={`md:hidden px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent cursor-pointer my-1 ${pathname === "/my-courses" ? "bg-accent" : ""}`}
+            >
+              Мої курси
+            </Link>
+          )}
           <div className="md:hidden">
             <Sheet open={open} onOpenChange={setOpen}>
               <SheetTrigger className="cursor-pointer" asChild>
