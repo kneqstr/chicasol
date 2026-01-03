@@ -14,6 +14,7 @@ export interface IBlog extends Document {
   blocks: IBlogBlock[];
   createdAt: Date;
   updatedAt: Date;
+  views: number;
   authorId: string;
 }
 const MultilangSchema = new Schema<MultilangText>(
@@ -38,6 +39,7 @@ const BlogSchema = new Schema<IBlog>(
     title: { type: MultilangSchema, required: true },
     slug: { type: String, required: true, unique: true },
     blocks: { type: [BlogBlockSchema], default: [] },
+    views: { type: Number, default: 0 },
     authorId: { type: String, required: true },
   },
   {
@@ -46,6 +48,6 @@ const BlogSchema = new Schema<IBlog>(
     toObject: { virtuals: true },
   },
 );
-BlogSchema.index({ authorId: 1 });
+BlogSchema.index({ views: -1 });
 BlogSchema.index({ createdAt: -1 });
 export default mongoose.models.Blog || mongoose.model<IBlog>("Blog", BlogSchema);

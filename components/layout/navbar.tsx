@@ -103,19 +103,12 @@ export const Navbar = ({ session, lang }: INavbar) => {
               )}
 
               {session.isAdmin && (
-                <MenubarMenu>
-                  <MenubarTrigger className="px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent  cursor-pointer">
-                    Admin
-                  </MenubarTrigger>
-                  <MenubarContent>
-                    <MenubarItem
-                      className={`cursor-pointer my-1 ${pathname === "/admin" ? "bg-accent" : ""}`}
-                      asChild
-                    >
-                      <Link href="/admin">Dashboard</Link>
-                    </MenubarItem>
-                  </MenubarContent>
-                </MenubarMenu>
+                <Link
+                  href="/admin"
+                  className={`px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent cursor-pointer my-1 ${pathname === "/admin" ? "bg-accent" : ""}`}
+                >
+                  Admin
+                </Link>
               )}
             </Menubar>
 

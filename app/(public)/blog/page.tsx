@@ -11,14 +11,16 @@ export default async function BlogPage() {
   const lang = await getLanguage();
   const content = await getPageContent("blog", lang);
 
-  const postsRaw: IBlog[] = await Blog.find().sort({ createdAt: -1 }).lean();
+  const postsRaw = await Blog.find().sort({ createdAt: -1 }).lean();
+  const popularRaw = await Blog.find().sort({ views: -1 }).limit(3).lean();
 
   const posts = JSON.parse(JSON.stringify(postsRaw));
+  const popular = JSON.parse(JSON.stringify(popularRaw))
 
   return (
-    <div className="mt-20 min-h-screen">
+    <div className="mt-16 min-h-screen">
       <BlogHero content={content.blog_page.hero} />
-      <FeaturedPosts posts={posts} lang={lang} />
+      <FeaturedPosts posts={popular} lang={lang} />
       <BlogPosts lang={lang} posts={posts} />
     </div>
   );
