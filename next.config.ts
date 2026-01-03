@@ -16,6 +16,11 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
+        hostname: "with-chicasol.b-cdn.net",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
         hostname: "images.squarespace-cdn.com",
         pathname: "/**",
       },

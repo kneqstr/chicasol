@@ -1,8 +1,6 @@
 import mongoose, { Schema, Document } from "mongoose";
 import { MultilangText } from "@/types/common";
-
 export type BlogBlockType = "h2" | "h3" | "h4" | "text" | "image" | "tags";
-
 export interface IBlogBlock {
   type: BlogBlockType;
   content?: MultilangText;
@@ -10,7 +8,6 @@ export interface IBlogBlock {
   imageUrl?: string;
   order: number;
 }
-
 export interface IBlog extends Document {
   title: MultilangText;
   slug: string;
@@ -19,7 +16,6 @@ export interface IBlog extends Document {
   updatedAt: Date;
   authorId: string;
 }
-
 const MultilangSchema = new Schema<MultilangText>(
   {
     ru: { type: String, default: "" },
@@ -27,7 +23,6 @@ const MultilangSchema = new Schema<MultilangText>(
   },
   { _id: false },
 );
-
 const BlogBlockSchema = new Schema<IBlogBlock>(
   {
     type: { type: String, required: true, enum: ["h2", "h3", "h4", "text", "image", "tags"] },
@@ -38,7 +33,6 @@ const BlogBlockSchema = new Schema<IBlogBlock>(
   },
   { _id: false },
 );
-
 const BlogSchema = new Schema<IBlog>(
   {
     title: { type: MultilangSchema, required: true },
@@ -52,8 +46,6 @@ const BlogSchema = new Schema<IBlog>(
     toObject: { virtuals: true },
   },
 );
-
 BlogSchema.index({ authorId: 1 });
 BlogSchema.index({ createdAt: -1 });
-
 export default mongoose.models.Blog || mongoose.model<IBlog>("Blog", BlogSchema);
