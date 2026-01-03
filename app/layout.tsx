@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { getPageContent } from "@/lib/translations/content";
 import { Footer } from "@/components/layout/footer";
 import { Providers } from "./providers";
+import { ScrollToTopOnRouteChange } from "@/components/scroll-to-top";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -35,6 +36,7 @@ export default async function RootLayout({
               <NavbarWrapper />
               <main className="flex-1">{children}</main>
               <Footer content={content.footer} />
+              <ScrollToTopOnRouteChange />
               <Toaster
                 position="top-center"
                 closeButton={false}

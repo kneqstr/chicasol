@@ -67,12 +67,12 @@ export const Navbar = ({ session, lang }: INavbar) => {
           <div className="hidden md:flex items-center gap-4">
             <div className="hidden lg:flex">
               {publicNavItems.map((item) => (
-                <div
+                <Link href={item.href}
                   className={`px-3 py-1.5 rounded-md text-sm font-medium hover:bg-accent cursor-pointer my-1 mx-0.5 ${pathname === item.href ? "bg-accent" : ""}`}
                   key={item.href}
                 >
-                  <Link href={item.href}>{item.lable}</Link>
-                </div>
+                  {item.lable}
+                </Link>
               ))}
             </div>
             <Menubar className="border-none bg-transparent">
