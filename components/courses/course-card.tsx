@@ -2,6 +2,7 @@
 
 import { Language } from "@/lib/translations/language";
 import { ICourse } from "@/models/course.model";
+import { formatDate } from "@/utils/formater";
 import Image from "next/image";
 import Link from "next/link";
 interface CourseCardProps {
@@ -11,7 +12,7 @@ interface CourseCardProps {
 
 export default function CourseCard({ course, lang }: CourseCardProps) {
   return (
-    <div className="rounded-xl overflow-hidden shadow-lg bg-white hover:shadow-xl transition-all duration-300 border border-gray-200">
+    <div className="rounded-xl w-200 overflow-hidden shadow-lg hover:shadow-xl bg-white transition-all duration-300 border border-gray-200">
       <Link href={`/courses/${course.name}`}>
         <div className="relative w-full h-56">
           <Image
@@ -29,5 +30,6 @@ export default function CourseCard({ course, lang }: CourseCardProps) {
         </div>
       </Link>
     </div>
+
   );
 }

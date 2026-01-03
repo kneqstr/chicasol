@@ -10,16 +10,17 @@ export default async function AboutCourses() {
   const courses = JSON.parse(JSON.stringify(rawCourses));
 
   return (
-    <div className="mt-20 min-h-screen max-w-7xl mx-auto px-4">
-      <h1 className="text-3xl font-bold mb-8">{lang === "ru" ? "Наши курсы" : "Наші курси"}</h1>
+    <div className="mt-20 min-h-screen max-w-5xl mx-auto px-4">
+      <h1 className="text-3xl font-bold mb-8 md:py-4">{lang === "ru" ? "Наши курсы" : "Наші курси"}</h1>
+
 
       {courses.length === 0 && (
-        <p className="text-gray-600">
+        <p className="text-accent">
           {lang === "ru" ? "Курсы пока отсутствуют." : "Курсів поки немає."}
         </p>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div className="flex justify-center gap-8">
         {courses.map((course: ICourse) => (
           <CourseCard key={course._id.toString()} course={course} lang={lang} />
         ))}
