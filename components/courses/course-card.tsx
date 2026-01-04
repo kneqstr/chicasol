@@ -19,7 +19,7 @@ export default function CourseCard({ course, lang }: CourseCardProps) {
             src={course.thumbnailUrl || "/placeholder-course.jpg"}
             alt={course.title[lang]}
             fill
-            className="object-cover"
+            className="object-cover object-top"
           />
         </div>
 
