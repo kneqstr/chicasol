@@ -23,7 +23,7 @@ export default async function CourseDetails({ params }: { params: Promise<{ slug
   })
     .sort({ order: 1 })
     .lean();
-
+  await new Promise(res => setTimeout(res, 1000))
   const videos = JSON.parse(JSON.stringify(rawVideos));
 
   return (

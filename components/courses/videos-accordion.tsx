@@ -1,8 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { IVideo } from "@/models/video.model";
 import { Language } from "@/lib/translations/language";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Clock, Tags } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 
 interface VideosAccordionProps {
   videos: IVideo[];
@@ -10,44 +17,57 @@ interface VideosAccordionProps {
 }
 
 export default function VideosAccordion({ videos, lang }: VideosAccordionProps) {
-  const [openIndex, setOpenIndex] = useState<number | null>(null);
-
-  const toggle = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
-
   return (
-    <div className="mt-20 min-h-screen space-y-4">
-      {videos.map((video, index) => (
-        <div key={video._id.toString()} className="border rounded-xl  bg-card shadow-sm">
-          <button
-            onClick={() => toggle(index)}
-            className="w-full flex items-center justify-between px-5 cursor-pointer py-4 rounded-xl text-left"
+    <section className="my-20 space-y-6">
+      <Accordion type="single" collapsible className="space-y-4">
+        {videos.map((video, index) => (
+          <AccordionItem
+            key={video._id.toString()}
+            value={video._id.toString()}
+            className="rounded-2xl border bg-card px-2 shadow-sm"
           >
-            <span className="font-semibold text-lg">{video.title[lang]}</span>
+            <AccordionTrigger className="px-4 py-4 text-left hover:no-underline  cursor-pointer">
+              <div className="flex w-full items-center justify-between gap-4">
+                <h3 className="text-base md:text-lg font-semibold leading-tight">
+                  {index + 1}. {video.title[lang]}
+                </h3>
 
-            <span className="text-gray-500 text-sm">{video.durationMinutes} мин</span>
-          </button>
-
-          {openIndex === index && (
-            <div className="px-5 pb-4 text-gray-600 space-y-2">
-              <p></p>
-              <div className="text-primary underline text-sm">{video.description[lang]}</div>
-              <p className="text-sm text-gray-500">{video.subdescription[lang]}</p>
-
-              {video.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2 mt-2">
-                  {video.tags.map((tag, i) => (
-                    <span key={i} className=" text-gray-700 text-xs px-2 py-1 rounded">
-                      {tag[lang]}
-                    </span>
-                  ))}
+                <div className="flex items-center gap-2 text-sm text-muted-foreground shrink-0">
+                  <Clock className="h-4 w-4" />
+                  <span>{video.durationMinutes} {lang === 'ru' ? 'мин' : 'хв'}</span>
                 </div>
-              )}
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
+              </div>
+            </AccordionTrigger>
+
+            <AccordionContent className="px-4 pb-5">
+              <div className="space-y-4">
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {video.description[lang]}
+                </p>
+
+                <p className="text-sm">
+                  {video.subdescription[lang]}
+                </p>
+
+                {video.tags.length > 0 && (
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {video.tags.map((tag, i) => (
+                      <Badge
+                        key={i}
+                        variant="secondary"
+                        className="text-xs"
+                      >
+                        <Tags className="mr-1 h-3 w-3" />
+                        {tag[lang]}
+                      </Badge>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
+    </section>
   );
 }
